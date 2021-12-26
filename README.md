@@ -1,5 +1,6 @@
 # julia-math-libraries
 Some math libraries that I made for usage while solving Project Euler problems
+https://projecteuler.net/
 
 Some of these algorithms are my original work. Some of them are from number theory text books or online math sources. Usually, if I snagged the algorithm from somewhere else then I left the source in the comments. This may not always be true though.
 
