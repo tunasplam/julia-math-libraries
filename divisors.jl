@@ -36,7 +36,7 @@ see p153.jl for implementation
 =#
 
 include("./factor_number.jl")
-include("./primes_list.jl")
+include("./primes.jl")
 using Printf
 
 function number_positive_divisors(num)
@@ -234,4 +234,6 @@ function main()
 	#end
 end
 
-@time main()
+if abspath(PROGRAM_FILE) == @__FILE__
+    main()
+end

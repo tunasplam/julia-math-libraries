@@ -6,11 +6,12 @@
 	Okay we might be able to use bitset sieves too loko at divyekapoor's soltuoin
 	to problem 10.
 =#
-# function main()	
-# 	# primorials...
-# 	prims = primorial_list_no_repeats(100)
-# 	println(prims)
-# end
+using Printf
+
+function main()	
+	# 3203324994356
+	@time @assert sum(prime_list_erat(10000000)) == 3203324994356
+end
 
 #=
 	Generates p_n# which is the nth primorial (multiply first n primes)
@@ -19,14 +20,15 @@
 	p# = 2(3)(5)(7) ... p if p prime
 	p# = 2(3)(5)(7) ... p_i if p NOT prime where p_i biggest prime s.t. p_i < p
 =#
-function primorial(n)
-	primes = prime_list_erat(n)
-	result = 1
-	for p in primes
-		result *= p
-	end
-	return result
-end
+primorial(n::Int64) = reduce(*, prime_list_erat(n))
+# function primorial(n::Int64)
+# 	primes = prime_list_erat(n)
+# 	result = 1
+# 	for p in primes
+# 		result *= p
+# 	end
+# 	return result
+# end
 
 #=
 	Generates 1#, 2#, ... , p_n#
@@ -35,7 +37,7 @@ end
 	p# = 2(3)(5)(7) ... p if p prime
 	p# = 2(3)(5)(7) ... p_i if p NOT prime where p_i biggest prime s.t. p_i < p
 =#
-function primorial_list(n)
+function primorial_list(n::Int64)
 	result = ones(n)
 	primes = prime_list_erat(n)
 	prim = 1
@@ -54,7 +56,7 @@ end
 
 # TODO estimates of prime counting function to get it so we can make
 # n close to the number of primes?
-function primorial_list_no_repeats(n)
+function primorial_list_no_repeats(n::Int64)
 	primes = prime_list_erat(n)
 	result = ones(length(primes))
 	prim = 1
@@ -66,7 +68,7 @@ function primorial_list_no_repeats(n)
 end
 
 # determine whether or not a number is prime.
-function prime(n)
+function prime(n::Int64)
 	# NOTE remove this if you know n will never be 2 or 3 for
 	# more performance
 	if n == 2 || n == 3
@@ -94,18 +96,19 @@ function prime(n)
 end
 
 # Faster if n > 10^6
-function prime_list_erat(n)
-	# Boolean array, indecies are 2 -> n
+function prime_list_erat(n::Int64)
+	# Boolean array, indicies are 2 -> n
 	A = [true for i in 2:n]
 	lim = Int(floor(n^(0.5)))
+	# lim < n by definition so @inbounds is safe
 	for i in 2:lim
-		if A[i-1]
+		@inbounds if A[i-1]
 			k = 0
-			j = i^2 + k*i
+			@fastmath j = i^2 + k*i
 			while j <= n
-				A[j-1] = false
-				k += 1
-				j = i^2 + k*i
+				@inbounds A[j-1] = false
+				@fastmath k += 1
+				@fastmath j = i^2 + k*i
 			end
 		end
 	end
@@ -116,12 +119,10 @@ function prime_list_erat(n)
 	return A
 end
 
-function prime_list_atkin_sieve(n)
+function prime_list_atkin_sieve(n::Int64)
 	
 end
 
-function main()
-	@time prime_list_erat(10^9)
+if abspath(PROGRAM_FILE) == @__FILE__
+    main()
 end
-
-main()

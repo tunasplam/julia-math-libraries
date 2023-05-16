@@ -1,5 +1,5 @@
 include("./gcd.jl")
-#include("./primes_list.jl")
+include("./factor_number.jl")
 using Printf
 
 function main()
@@ -92,10 +92,10 @@ end
 
 function totient(n)
 #=
+	counts number of positive integers k up to n
+	s.t. k and n are relatively prime.
 	phi(n) = pi(p|n) [ 1 - 1/p ]
 	So we need the prime factors of n in order for this to work.
-	BTW what is this? counts number of positive integers k up to n
-	s.t. k and n are relatively prime.
 =#
 	prime_factors = list_prime_divisors(n)
 	for prime in prime_factors
@@ -104,42 +104,8 @@ function totient(n)
 	return floor(Int, n)
 end
 
-function list_prime_divisors(n)
-#= 
-	Prime factorization method altered to ignore the powers.
-	So just returns the primes p. Useful for totient function.
-=#
-	factorization = []
-	if n % 2 == 0
-		while n % 2 == 0
-			n ÷= 2
-		end
-		push!(factorization, 2)
-	end
-
-	# now starting at 3, check every odd number up to sqrt(n)
-	factor = 3
-	max_factor = floor(n^(0.5))
-	while n > 1 && factor <= max_factor
-		if n % factor == 0
-			n ÷= factor
-			while n % factor == 0
-				n ÷= factor
-			end
-			push!(factorization, factor)
-			max_factor = floor(n^(0.5))
-		end
-		factor += 2
-	end
-	if n == 1
-		return factorization
-	# if here then n has been reduced to last prime factor.
-	# push and return it.
-	else
-		push!(factorization, n)
-		#println("Heyy")
-		return factorization
-	end
+# only run the main function if this file is invoked directly, not when it is being
+# used as a library.
+if abspath(PROGRAM_FILE) == @__FILE__
+    main()
 end
-
-main()

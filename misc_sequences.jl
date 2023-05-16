@@ -5,7 +5,7 @@
 	- Triangular numbers (both given term and iterator)
 =#
 
-include("./primes_list.jl")
+include("./primes.jl")
 include("./factor_number.jl")
 using Printf
 
