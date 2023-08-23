@@ -40,8 +40,6 @@ function solve_pell_equation(D, num_solutions)
 	So, we will need a function that generates the convergent fraction to
 	a desireable limit and then this function will parse the periods.
 
-	TODO look at 1st solution for D = 2. Theres an issue where it says
-	1 // 1 is the solution but this is not the right answer.
 	TODO check for square values of D.
 
 	Returns list of fractions where each fraction is 
@@ -67,6 +65,8 @@ end
 
 function solve_general_pell_equation(D, N, num_solutions)
 	#=
+	TODO overflow...
+
 	For context see problem 138
 	I will never sleep. This can be made into a general pell equation.
 
@@ -129,9 +129,13 @@ function solve_general_pell_equation(D, N, num_solutions)
 	c = 4 makes b = 0 so YES degenerate.
 
 	=#
+	if D < 0
+		println("Hey doofus, D must be positive. Flip the sign.")
+		return
+	end
+	
 	# Find the solutions we need from the resolvant.
 	resolvant_solutions = solve_pell_equation(D, num_solutions)
-
 	@printf "Finding first %d solutions to c^2 - %dd^2 = %d\n" num_solutions D N
 	@printf "n \t c_n \t d_n\n"
 
@@ -140,9 +144,11 @@ function solve_general_pell_equation(D, N, num_solutions)
 	e_0, f_0 = numerator(convergent), denominator(convergent)
 
 	# Brute force find c_0 d_0
+	# 5/18/2023 the "== N" was incorrectly hardcoded at -4
+	# This fix should now make this function bulletproof.
 	c_0, d_0 = 0, 0
 	for c in 1:100, d in 1:100
-		if c^2 - D*d^2 == -4
+		if c^2 - D*d^2 == N
 			c_0, d_0 = c, d
 			break
 		end
@@ -157,7 +163,7 @@ function solve_general_pell_equation(D, N, num_solutions)
 
 	@printf "0 \t %d \t %d\n" c_0 d_0
 
-	# TODO number of solutions seem off? Check if you need to count
+	# NOTE number of solutions seem off? Check if you need to count
 	# the seed solution.
 	solutions = [[c_0, d_0]]
 	for resolvant_solution in resolvant_solutions
@@ -259,7 +265,10 @@ function find_kth_convergent_sqrt(n, k)
 	new_cf = [cf[1]]
 	for i in 1:k append!(new_cf, cf[2:length(cf)]) end
 	new_cf = map(x -> floor(Int, x), new_cf)
-	new_cf = new_cf[1:length(new_cf)-1]
+	# 5/18/2023 added this if clause to fix the broken case n=2, k=1
+	if length(new_cf) > 2
+		new_cf = new_cf[1:length(new_cf)-1]
+	end
 
 	a = pop!(new_cf)
 	while length(new_cf) > 0
