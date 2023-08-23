@@ -115,7 +115,7 @@ function divisor_sum_dirichlet_hyperbola(x)
 		requires some pictures so please refer to the link. There are definitely
 		many more series that we can apply this method to.
 	=#
-	s = floor(sqrt(x))
+	s = isqrt(x)
 	r = 0
 	for n in 1:s
 		r += x ÷ n
@@ -134,7 +134,6 @@ function num_positive_divisors_linear_sieve(x::Int64)
 
 		OEIS: A000005
 	=#
-	# TODO maybe up the size if needbe? overflow detection? modulus?
 	d = Array{Int64}(undef, x)
 
 	for k in 1:x
@@ -172,18 +171,12 @@ function kth_divisor_function_sum(x::Int64, k::Int64, m::Int64)
 	y = max(y, isqrt(x))
 
 	# this is the sequence that will be used for the sieve. Length y
-	sieved = Array{Int64}(undef, y)
-	# initiliaze to natural numbers
-	for i in eachindex(sieved)
-		sieved[i] = i % m
-	end
+	sieved = [i % m for i in 1:y]
 
 	# this is the array that will be updated using the hyperbola method. Length x/y
-	big = Array{Int64}(undef, x ÷ y)
 	# initiliaze all elements to (x ÷ y) % m
-	for i in eachindex(big)
-		big[i] = (x ÷ y) % m
-	end
+	big = [(x ÷ y) % m for i in 1:(x ÷ y)]
+
 
 	# iterate through each value of k
 	for j in 2:k

@@ -99,10 +99,7 @@ function totient_list_linear_sieve(n::Int64)
 		performs in O(y log log y) time
 	=#
 	# generate a sequence of natural numbers from 1:n
-	phi = Array{Int64}(undef, n)
-	for k in 1:n
-		phi[k] = k
-	end
+	phi = [k for k in 1:n]
 	
 	# iterate through all primes from 2 to y and use them to contribute to the phi values of
 	# their multiples. NOTE we do not need to generate a list of primes here bc, as we iterate

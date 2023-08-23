@@ -8,10 +8,6 @@
 =#
 using Printf
 
-function main()	
-	# 3203324994356
-	@time @assert sum(prime_list_erat(10000000)) == 3203324994356
-end
 
 #=
 	Generates p_n# which is the nth primorial (multiply first n primes)
@@ -20,15 +16,8 @@ end
 	p# = 2(3)(5)(7) ... p if p prime
 	p# = 2(3)(5)(7) ... p_i if p NOT prime where p_i biggest prime s.t. p_i < p
 =#
-primorial(n::Int64) = reduce(*, prime_list_erat(n))
-# function primorial(n::Int64)
-# 	primes = prime_list_erat(n)
-# 	result = 1
-# 	for p in primes
-# 		result *= p
-# 	end
-# 	return result
-# end
+# TODO if linear_sieve is faster then switch this over
+primorial(n::Int64) = reduce(*, prime_list_linear_sieve(n))
 
 #=
 	Generates 1#, 2#, ... , p_n#
@@ -60,7 +49,7 @@ function primorial_list_no_repeats(n::Int64)
 	primes = prime_list_erat(n)
 	result = ones(length(primes))
 	prim = 1
-	for i in 1:length(primes)
+	for i in eachindex(primes)
 		prim *= primes[i]
 		result[i] = prim
 	end
@@ -97,9 +86,13 @@ end
 
 # Faster if n > 10^6
 function prime_list_erat(n::Int64)
+	#=
+		This runs in O(n log n)
+	=#
+	print("WARNING: prim_list_erat is SLOW and uses lots of RAM. use prime_list_linear_sieve instead.")
 	# Boolean array, indicies are 2 -> n
 	A = [true for i in 2:n]
-	lim = Int(floor(n^(0.5)))
+	lim = isqrt(n)
 	# lim < n by definition so @inbounds is safe
 	for i in 2:lim
 		@inbounds if A[i-1]
@@ -119,8 +112,66 @@ function prime_list_erat(n::Int64)
 	return A
 end
 
-function prime_list_atkin_sieve(n::Int64)
-	
+function prime_list_linear_sieve(n::Int64)
+	#=
+		This runs in O(n)
+		See this blog post
+		https://codeforces.com/blog/entry/54090
+
+		The idea is very beautiful.
+		Assume that all numbers are prime unless proved otherwise.
+		Iterate through numbers from 2:n
+		if the number is marked as prime, add it to primes.
+		mark all multiples of the prime as composite
+
+		Note that this likely requires much more RAM than prime_list_erat()
+		ACTUALLY ... NO. This is ENORMOUSLY superior to the erat method
+		IN EVERY WAY.
+	=#
+	is_composite = [false for i in 2:n]
+	primes = Vector{Int64}(undef, 0)
+	for i in 2:(n-1)
+		@inbounds if !is_composite[i]
+			append!(primes, i)
+		end
+
+		# this loop only runs once per composite number so this performs at O(n) complexity.
+		for j in 1:length(primes)
+			# break if this value exceeds n
+			@inbounds if i * primes[j] ≥ n
+				break
+			end
+
+			# mark all multiples of this prime as composite
+			@inbounds is_composite[i * primes[j]] = true
+
+			# this guarantees that we pick out each composite only once.
+			@inbounds if i % primes[j] == 0
+				break
+			end
+		end
+	end
+	return primes
+end
+
+function main()
+	lim = 10^7
+
+	@time p2 = prime_list_erat(lim)
+	@time p3 = prime_list_linear_sieve(lim)
+
+	@printf "%s .. %s\n" p2[1:10] p2[length(p2)-10:length(p2)]
+	@printf "%s .. %s\n" p3[1:10] p3[length(p3)-10:length(p3)]
+
+	println(length(p2))
+	println(length(p3))
+	@assert length(p2) == length(p3)
+
+	for i in eachindex(p2)
+		if p2[i] != p3[i]
+			@printf "%d %d != %d\n" i p2[i] p3[i]
+		end
+	end
 end
 
 if abspath(PROGRAM_FILE) == @__FILE__
