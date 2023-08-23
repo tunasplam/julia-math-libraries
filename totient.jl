@@ -2,20 +2,6 @@ include("./gcd.jl")
 include("./factor_number.jl")
 using Printf
 
-function main()
-	lim = 10^7
-	@time l1 = [totient(x) for x in 1:lim]
-	@time l2 = totient_list(lim)
-	println(l1[1:30])
-	println(l2[1:30])
-
-	for i in 1:lim
-		if l1[i] != l2[i]
-			@printf "%d %d != %d\n" i l1[i] l2[i]
-		end
-	end
-end
-
 function totient_list(n)
 #=
 	Generate phi(n) for 1 .. n using some nifty properties:
@@ -42,6 +28,7 @@ function totient_list(n)
 	everytime a 0 is encountered. Then figure out as many other easy values
 	as we can using the properties above.
 =#
+	println("WARNING: totient_list(n) is slow. Try totient_list_linear_sieve(n). ITS BAZONGAS FAST.")
 	result = zeros(Int, n)
 	result[1] = 1
 	for a in 2:n
@@ -103,6 +90,51 @@ function totient(n)
 	end
 	return floor(Int, n)
 end
+
+function totient_list_linear_sieve(n::Int64)
+	#=
+		See Tangent: Linear Sieving header:
+		https://gbroxey.github.io/blog/2023/04/30/mult-sum-1.html#summing-generalized-divisor-functions
+
+		performs in O(y log log y) time
+	=#
+	# generate a sequence of natural numbers from 1:n
+	phi = Array{Int64}(undef, n)
+	for k in 1:n
+		phi[k] = k
+	end
+	
+	# iterate through all primes from 2 to y and use them to contribute to the phi values of
+	# their multiples. NOTE we do not need to generate a list of primes here bc, as we iterate
+	# upwards, if p == phi[p] the no prior primes have affected this current value of phi[p].
+	# this means that p is prime. VERY SLICK. This can be done for any function that operates
+	# using prime factors such as this.
+	for p in 2:n
+		if phi[p] == p
+			for k in 1:(n ÷ p)
+				phi[p*k] = (phi[p*k] ÷ p) * (p-1)
+			end
+		end
+	end
+	return phi
+end
+
+function main()
+	lim = 10^7
+	@time l1 = [totient(x) for x in 1:lim]
+	@time l2 = totient_list(lim)
+	@time l3 = totient_list_linear_sieve(lim)
+	println(l1[1:30])
+	println(l2[1:30])
+	println(l3[1:30])
+
+	for i in 1:lim
+		if l1[i] != l3[i]
+			@printf "%d %d != %d\n" i l1[i] l3[i]
+		end
+	end
+end
+
 
 # only run the main function if this file is invoked directly, not when it is being
 # used as a library.
