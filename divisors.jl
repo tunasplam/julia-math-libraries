@@ -1,5 +1,5 @@
-
-#=  Theorem 6-1 on page 104 of our number theory book
+#= 
+Theorem 6-1 on page 104 of our number theory book
   has a beautiful algorithm that we can use
 
  Going to test it against our other divisor algorithm to 
@@ -63,113 +63,6 @@ function number_positive_divisors(num)
 	return tau
 end
 
-function sigma_zero_list_brute_force(num)
-	#=
-	I am sure there are nice identities to speed this up.
-	Doesn't work i think things got renamed
-	=#
-	sigma = []
-	for i in 1:num
-		p_fact_powers = prime_factors(i)
-		total = 1
-		for power in p_fact_powers
-			total *= (power + 1)
-		end
-		append!(sigma, p_fact_powers)
-	end
-	return sigma
-end
-
-function generate_sigma_zero_list(lim)
-	#=
-	Here are the nice identities to speed it up.
-	note that there is apparently a recurrence relation but gonna
-	try this for fun.
-
-	Yeah. This doesn't work.
-	=#
-	primes = prime_list_erat(lim)
-	sigma_zero = zeros(Int, lim)
-	sigma_zero[1] = 1
-
-	# Start by populating all primes as 2. Then knock out their powers.
-	# for a prime p, sigma_zero(p^k) = 2^k
-	for p in primes
-		sigma_zero[p] = 2
-		k = 2
-		while p^k < lim
-			sigma_zero[p^k] = k + 1
-			k += 1
-		end
-	end
-
-	# Now for all of the numbers that have not been generated.
-	for n in 1:length(sigma_zero)
-
-		# here check if n prime, if so do the algorithm for the primes
-		# TODO faster to do this or run out prime test?
-		# skip if already generated
-		if sigma_zero[n] > 0 || n in primes
-			continue
-		end
-
-		# find number of positive divisiors. doing it here so p_fact is saved
-		# for later.
-		p_fact = prime_factorize(n)
-
-		tau = 1
-		# Prime factorization is list of tuples (prime, power)
-		for prime_pair in p_fact
-			tau *= prime_pair[2] + 1
-		end
-		sigma_zero[n] = tau
-
-		#= Now, generate the values for each prime being multiplied and the powers
-		of those primes being multiplied. More speed can be added possibly by adding
-		more cases here.
-		for now covers...
-		2*3 2*3^2 2*3^3 ...
-		2*3*5 2*3*5^2 2*3*5^3 ...
-		2*3*5*7 2*3*5*7^2 ...
-		=#
-		k = n
-		# t # of distinct primes being used
-		#t = 1
-		for p in primes[1:end]
-			# if this prime is in the p_fact of n, skip
-			flag = false
-			for q in p_fact
-				if q[1] == p
-					flag = true
-					break
-				end
-			end
-			if flag
-				continue
-			end
-
-			if k*p > lim
-				break
-			end
-			sigma_zero[k*p] = sigma_zero[k] * 2
-			#l = k*p
-
-			# # now the powers
-			# l = k*(p^2)
-			# while l < lim
-			# 	if l == 988
-			# 		println(n, " ", p)
-			# 	end
-			# 	sigma_zero[l] = sigma_zero[l ÷ p] + 2^t
-			# 	l *= p
-			# end
-			# k *= p
-			# t += 1
-		end
-	end
-	return sigma_zero
-end
-
 function generate_sigma_one(n)
 	#=
 	Gives us the SUM of the divisors.
@@ -209,29 +102,150 @@ function generate_sigma_two(n::Integer)
 	return total
 end
 
-function main()
+function divisor_sum_dirichlet_hyperbola(x)
 	#=
-	Things to look at for both n and sigma(n)
-		- prime factors -> i don't see anything.
-		- divisors -> doubt we will see a pattern here.
-		- ratio between terms -> no don't see much here either.
-		- sqrt
-	=#
+		Sum of the # of divisors of n for n ≤ x
 
-	squares = []
-	for n in 1:10^5
-		total = generate_sigma_two(n)
-		if isinteger(sqrt(total))
-			@printf "%d \t sigma_two = %d \t %d\n" n total sqrt(total)
-			append!(squares, total)
+		Uses the Dirichlet Hyperbola method. O(sqrt(x)) time.
+		https://gbroxey.github.io/blog/2023/04/30/mult-sum-1.html
+
+		2 * sum_{n ≤ x} floor(x/n) - floor(x)^2
+
+		The math on how to arrive to this is very fun and insightful but
+		requires some pictures so please refer to the link. There are definitely
+		many more series that we can apply this method to.
+	=#
+	s = floor(sqrt(x))
+	r = 0
+	for n in 1:s
+		r += x ÷ n
+	end
+	return 2r - s^2
+end
+
+function num_positive_divisors_linear_sieve(x::Int64)
+	#=
+		See the header "Tangent: Linear Sieving"
+
+		https://gbroxey.github.io/blog/2023/04/30/mult-sum-1.html#summing-generalized-divisor-functions
+
+		Runs in O(xlogx)
+		This returns a sequence where each value is the number of divisors of the index number.
+
+		OEIS: A000005
+	=#
+	# TODO maybe up the size if needbe? overflow detection? modulus?
+	d = Array{Int64}(undef, x)
+
+	for k in 1:x
+		# increment d[k*j] for all multiples k*j <= x
+		for j in 1:(x ÷ k)
+			d[k*j] += 1
 		end
 	end
-	sort!(squares)
-	unique!(squares)
-	#println(squares)
-	#for i in 1:length(squares)-1
-	#	println(squares[i+1]/squares[i])
-	#end
+	return d
+end
+
+function kth_divisor_function_sum(x::Int64, k::Int64, m::Int64)
+	#=
+		See "Algorithm (Computing D_k(x) iteratively)
+		https://gbroxey.github.io/blog/2023/04/30/mult-sum-1.html#summing-generalized-divisor-functions
+
+		Runs n O(x/sqrt(y)) where y is the size of the sieved values.
+		The speed of this comes from sieving the first y values and then
+		iteratively knocking out the rest of the vlaues using the hyperbola method.
+
+		If y is picked on the order of x^(2/3), then the runtime is O(kx^(2/3))
+
+		The returned value is:
+		d_k(1) + d_k(2) + ... + d_k(x) mod m
+
+		The result is the sum of the kth power of the number of divisors for each natural number.
+
+		OEIS for k = 4: A001159
+
+		TODO a version without mod to save time? does that matter?
+		TODO implement linear_sieve_prod_unit
+	=#
+	# 1. set y on the order of x^(2/3)
+	y = Int64(floor(0.55*x^(2/3)))
+	y = max(y, isqrt(x))
+
+	# this is the sequence that will be used for the sieve. Length y
+	sieved = Array{Int64}(undef, y)
+	# initiliaze to natural numbers
+	for i in eachindex(sieved)
+		sieved[i] = i % m
+	end
+
+	# this is the array that will be updated using the hyperbola method. Length x/y
+	big = Array{Int64}(undef, x ÷ y)
+	# initiliaze all elements to (x ÷ y) % m
+	for i in eachindex(big)
+		big[i] = (x ÷ y) % m
+	end
+
+	# iterate through each value of k
+	for j in 2:k
+		# update big first. iterate through every element
+		# this is done using the hyperbola method. The formula is too atrocious to write
+		# in the comments here so make sure to follow the link in the function documentation.
+		for i in eachindex(big)
+			v = x ÷ i
+			vsqrt = isqrt(v)
+			bigNew = 0
+			for n in 1:vsqrt
+				# add D_{j-1}(v/n) = D_{j-1}(x/(i*n)) (first summation in hyperbola method)
+				# hit the sieve if we can
+				if v ÷ n <= y
+					bigNew += sieved[v ÷ n]
+				else
+					bigNew += big[i*n]
+				end
+				# add d_{j-1}(n) floor(v/n) (second summation in hyperbola method)
+				bigNew += (sieved[n] - sieved[n-1]) * (v ÷ n)
+				bigNew = bigNew % m
+			end
+			# subtract the overlap (third bit of the hyperbola method)
+			bigNew -= sieve[vsqrt]*vsqrt
+			big[i] = bigNew % m
+		end
+		# update sieved using sieving
+		# convert sieved from summation to d_{j-1}, convolve, then convert back
+		for i in y:-1:1
+			sieved -= sieved[i-1]
+		end
+		# TODO implement this :)
+		sieved = linear_sieve_prod_unit(small, m)
+		for i in eachindex(small)
+			sieved[i] = (sieved[i] + sieved[i-1]) % m
+		end
+	end
+
+	# fill up the return array by combining sieved and big
+	Dk = Array{Int64}(undef, x)
+	for i in eachindex(Dk)
+		if i <= y
+			Dk[i] = sieved[i]
+		else
+			Dk[i] = big[x ÷ y]
+		end
+	end
+	return Dk
+end
+
+function main()
+	test_set = sum([
+		1, 17, 82, 273, 626, 1394, 2402, 4369, 6643, 10642, 14642, 22386, 28562,
+		40834, 51332, 69905, 83522, 112931, 130322, 170898, 196964, 248914, 279842, 358258,
+		391251, 485554, 538084, 655746, 707282, 872644, 923522, 1118481, 1200644
+	])
+
+	@time res = kth_divisor_function_sum(3, 43, 10000000)
+
+	println(test_set)
+	println(res)
+
 end
 
 if abspath(PROGRAM_FILE) == @__FILE__
