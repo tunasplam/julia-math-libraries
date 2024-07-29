@@ -1,6 +1,6 @@
 # list of primes 1 to n
 #=  TODO
-	1. Get atkin sieve going
+	1. Get atkin sieve going.
 	2. hk has an insane sieve posted in solutions to p187
 
 	Okay we might be able to use bitset sieves too loko at divyekapoor's soltuoin
@@ -89,7 +89,7 @@ function prime_list_erat(n::Int64)
 	#=
 		This runs in O(n log n)
 	=#
-	print("WARNING: prim_list_erat is SLOW and uses lots of RAM. use prime_list_linear_sieve instead.")
+	println("WARNING: prime_list_erat is SLOW and uses lots of RAM. use prime_list_linear_sieve instead.")
 	# Boolean array, indicies are 2 -> n
 	A = [true for i in 2:n]
 	lim = isqrt(n)
@@ -146,6 +146,7 @@ function prime_list_linear_sieve(n::Int64)
 			@inbounds is_composite[i * primes[j]] = true
 
 			# this guarantees that we pick out each composite only once.
+			# see comments on the blog post for better explanation
 			@inbounds if i % primes[j] == 0
 				break
 			end

@@ -118,7 +118,7 @@ function divisor_sum_dirichlet_hyperbola(x)
 	s = isqrt(x)
 	r = 0
 	for n in 1:s
-		r += x ÷ n
+		@fastmath r += x ÷ n
 	end
 	return 2r - s^2
 end
@@ -139,7 +139,7 @@ function num_positive_divisors_linear_sieve(x::Int64)
 	for k in 1:x
 		# increment d[k*j] for all multiples k*j <= x
 		for j in 1:(x ÷ k)
-			d[k*j] += 1
+			@inbounds @fastmath d[k*j] += 1
 		end
 	end
 	return d
@@ -219,9 +219,9 @@ function kth_divisor_function_sum(x::Int64, k::Int64, m::Int64)
 	Dk = Array{Int64}(undef, x)
 	for i in eachindex(Dk)
 		if i <= y
-			Dk[i] = sieved[i]
+			@inbounds Dk[i] = sieved[i]
 		else
-			Dk[i] = big[x ÷ y]
+			@inbounds @fastmath Dk[i] = big[x ÷ y]
 		end
 	end
 	return Dk

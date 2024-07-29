@@ -2,10 +2,10 @@ include("./factor_number.jl")
 include("./linear_congruences.jl")
 
 
-function main()
-	lim = 10^9
-	println(last_k_digits_before_trailing_zeros_in_n_factorial(lim))
-end
+# function main()
+# 	lim = 10^9
+# 	println(last_k_digits_before_trailing_zeros_in_n_factorial(lim))
+# end
 
 mutable struct Factorial{T<:Integer}
 	prev_n::T
@@ -160,5 +160,3 @@ function last_k_digits_of_n_factorial(n, k)
 	end
 	return fact
 end
-
-@time main()

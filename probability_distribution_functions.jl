@@ -56,3 +56,31 @@ function geometric(θ::Float64, x::Int)
     =#
     return (1-θ)^k*θ
 end
+
+function exponential(λ::Float64, a::Float64=-Inf, b::Float64=Inf)
+    #=
+        Situation when to use this
+            continuous variable and most likely lifespan of something
+            λ -> very similar to poisson above?
+
+        To solve P(a <= x <= b) use exponential(λ, a, b)
+        To solve P(x <= b)      use exponential(λ, a=-Inf, b=b)
+        Remember bc discrete P(x <= a) = P(x < 0) since P(X = x) = 0 for all x
+    =#
+    if b > a
+        return 0
+    end
+
+    if a == -Inf && b == Inf
+        return 1
+    
+    elseif a == -Inf
+        return (-1)*ℯ^((-1)*λ*b)
+    
+    elseif b == Inf
+        return ℯ^((-1)*λ*a)
+    
+    else
+        return ℯ^((-1)*λ*a) - (-1)*ℯ^((-1)*λ*b)
+    end
+end

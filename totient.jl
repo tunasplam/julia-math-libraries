@@ -107,9 +107,9 @@ function totient_list_linear_sieve(n::Int64)
 	# this means that p is prime. VERY SLICK. This can be done for any function that operates
 	# using prime factors such as this.
 	for p in 2:n
-		if phi[p] == p
+		@inbounds if phi[p] == p
 			for k in 1:(n ÷ p)
-				phi[p*k] = (phi[p*k] ÷ p) * (p-1)
+				@inbounds @fastmath phi[p*k] = (phi[p*k] ÷ p) * (p-1)
 			end
 		end
 	end
@@ -117,7 +117,7 @@ function totient_list_linear_sieve(n::Int64)
 end
 
 function main()
-	lim = 10^7
+	lim = 10^6
 	@time l1 = [totient(x) for x in 1:lim]
 	@time l2 = totient_list(lim)
 	@time l3 = totient_list_linear_sieve(lim)
@@ -132,9 +132,20 @@ function main()
 	end
 end
 
+function test()
+	lim = 10^10
+	@time l1 = totient_list_linear_sieve(lim)
+
+	for num in l1
+		if num == 6227020800
+			println(num)
+		end
+	end
+end
+
 
 # only run the main function if this file is invoked directly, not when it is being
 # used as a library.
 if abspath(PROGRAM_FILE) == @__FILE__
-    main()
+    test()
 end
