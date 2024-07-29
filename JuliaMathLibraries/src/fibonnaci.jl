@@ -8,6 +8,7 @@
 
 include("./sequence.jl")
 using Printf
+using Base.MathConstants
 
 #=
 	mutable - can change the fields
@@ -45,6 +46,21 @@ function Base.iterate(F::Fibonnaci, state=1)
 	end
 end
 
+# Lets us use formula to grab nth term using indexing.
+function Base.getindex(F::Fibonnaci, n::Int)
+	0 <= n || throw(BoundsError(F, n))
+	# uses binet's formula
+	# TODO speed up i believe since one of these terms is vanishingly small
+	# at sufficiently large n
+	return (φ^n - (-φ)^(-n))/sqrt(5)
+end
+
+Base.length(F::Fibonnaci) = F.n
+Base.firstindex(F::Fibonnaci) = 1
+Base.lastindex(F::Fibonnaci) = length(F)
+Base.getindex(F::Fibonnaci, i::Number) = F[convert(Int, i)]
+Base.getindex(F::Fibonnaci, I) = [F[i] for i in I]
+
 #=
 	Generates the fibonnaci sequence mod some integer k. Values never rise
 	above k :) Will be very very fast for us.
@@ -70,74 +86,59 @@ function Base.iterate(F::Fibonnanci_mod_k, state=1)
 	end
 end
 
-#=
-	mutable - can change the fields
-	struct - its a class
-	T <: Integer - takes any type T that is a subtype of Integer
-=#
+function Base.getindex(F::Fibonnanci_mod_k, n::Int)
+	0 <= n || throw(BoundsError(F, n))
+	# uses binet's formula
+	# TODO speed up i believe since one of these terms is vanishingly small
+	# at sufficiently large n
+	return round((φ^n - (-φ)^(-n))/sqrt(5)) % F.k
+end
+
+Base.length(F::Fibonnanci_mod_k) = F.n
+Base.firstindex(F::Fibonnanci_mod_k) = 1
+Base.lastindex(F::Fibonnanci_mod_k) = length(F)
+Base.getindex(F::Fibonnanci_mod_k, i::Number) = F[convert(Int, i)]
+Base.getindex(F::Fibonnanci_mod_k, I) = [F[i] for i in I]
+
+
 mutable struct Tribonnaci{T<:Integer}
 	# The last three values stored as a tuple of type T
 	last3::Tuple{T, T, T}
 	# nth term in sequence
 	n::Int
 end
-# explicitly listing out the different ways that the constructor
-# handles different types of args.
+
 tribonnaci(n::Integer) = Tribonnaci((1,1,1), n)
-# This allows us to use BigInts instead of Ints.
-# Called like fibonnaci(10^14, BigInt)
 tribonnaci(n::Integer, T::Type) = Tribonnaci{T}((1,1,1), n)
 
-# State default set to 1. Theres a reason why i just dunno how to explain.
 function Base.iterate(T::Tribonnaci, state=1)
 	if state == 1 || state == 2 || state == 3
-		# If at the initial condition, return 1 (the first)
-		# Fibonnaci value as well as 2 for state
 		(1, state + 1)
-	# check end condition, if there will be one.
 	elseif state > T.n
 		nothing
 	else
-		# Set the last2 values to be the new last two values
 		T.last3 = T.last3[2], T.last3[3], sum(T.last3)
-		# "yield" the new value and the new state
 		(T.last3[3], state + 1)
 	end
 end
 
-#=
-	mutable - can change the fields
-	struct - its a class
-	T <: Integer - takes any type T that is a subtype of Integer
-=#
 mutable struct Tribonnaci_mod_k{T<:Integer}
-	# The last three values stored as a tuple of type T
 	last3::Tuple{T, T, T}
-	# nth term in sequence
 	n::Int
 	k::Int
 end
-# explicitly listing out the different ways that the constructor
-# handles different types of args.
+
 tribonnaci_mod_k(n::Integer, k::Integer) = Tribonnaci_mod_k((1,1,1), n, k)
-# This allows us to use BigInts instead of Ints.
-# Called like fibonnaci(10^14, BigInt)
 tribonnaci_mod_k(n::Integer, k::Integer, T::Type) = Tribonnaci_mod_k{T}((1,1,1), n, k)
 Base.length(T::Tribonnaci_mod_k) = T.n
 
-# State default set to 1. Theres a reason why i just dunno how to explain.
 function Base.iterate(T::Tribonnaci_mod_k, state=1)
 	if state == 1 || state == 2 || state == 3
-		# If at the initial condition, return 1 (the first)
-		# Fibonnaci value as well as 2 for state
 		(1, state + 1)
-	# check end condition, if there will be one.
 	elseif state > T.n
 		nothing
 	else
-		# Set the last2 values to be the new last two values
 		T.last3 = T.last3[2], T.last3[3], sum(T.last3) % T.k
-		# "yield" the new value and the new state
 		(T.last3[3], state + 1)
 	end
 end
@@ -180,22 +181,3 @@ function A001175(n)
 	end
 	return hehe
 end
-
-function main()
-	# even numbers will never divide.
-
-	i = 1
-	for d in 3:2:10001
-		seq = collect(tribonnaci_mod_k(10^6, d))
-		t = findfirst(x -> x == 0, seq)
-		if t === nothing
-			println(i, " ", d)
-			i += 1
-		end
-		#println(seq)
-		#println(check_sequence_for_cycle(seq))
-	end
-
-end
-
-main()
