@@ -1,10 +1,11 @@
 module JuliaMathLibraries
 
 include("./fibonnaci.jl")
-include("./sequence.jl")
-
 export fibonnaci
 export fibonnaci_mod_k
+
+include("./sequence.jl")
+export check_sequence_for_cycle
 
 greet() = print("Hello World!")
 
