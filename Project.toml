@@ -1,0 +1,8 @@
+name = "JuliaMathLibraries"
+uuid = "4de8617c-8f16-4fa9-9d97-90b98c2bd9f7"
+authors = ["jordan "]
+version = "0.1.0"
+
+[deps]
+Printf = "de0858da-6303-5e67-8744-51eddeeeb8d7"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"

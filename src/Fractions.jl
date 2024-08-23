@@ -5,7 +5,7 @@
 include("./factor_number.jl")
 include("./gcd.jl")
 
-function terminating_or_repeating(a, b)
+function terminates(a, b)
 	#=
 	Returns true if terminating and false if repeating.
 	Cool little algorithm i figure out..
