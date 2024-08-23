@@ -8,4 +8,7 @@ include("SquareRoots.jl")
 export terminates
 include("Fractions.jl")
 
+export gcd
+include("GCD.jl")
+
 end

@@ -2,13 +2,6 @@
 
 using Printf
 
-function gcd_old(a,b)
-	if a == 0
-		return b
-	end
-	return gcd(b%a, a)
-end
-
 function bezout_coefficients(a, b, solution=1)
 #=
 	https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm

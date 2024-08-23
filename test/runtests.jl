@@ -20,3 +20,31 @@ end
     @test J.terminates(10, 100) == true
     @test J.terminates(5, 7) == false
 end
+
+# GCD
+@testset "GCD.jl" begin
+
+    # GCD
+    @test J.gcd(10, 1) == 1
+    @test J.gcd(5, 2) == 1
+    @test J.gcd(17, 32) == 1
+    @test J.gcd(2, 2) == 2
+    @test J.gcd(10, 5) == 5
+    @test J.gcd(24, 36) == 12
+    @test J.gcd(30, 20) == 10
+
+    # GCD Binary
+    @test J.gcd_binary(10, 1) == 1
+    @test J.gcd_binary(5, 2) == 1
+    @test J.gcd_binary(17, 32) == 1
+    @test J.gcd_binary(2, 2) == 2
+    @test J.gcd_binary(10, 5) == 5
+    @test J.gcd_binary(24, 36) == 12
+    @test J.gcd_binary(30, 20) == 10
+
+    # Bezout Coefficients
+    @test J.bezout_coefficients(34, 19) == (-5, 9)
+    @test J.bezout_coefficients(237, 13) == (-4, 73)
+    @test J.bezout_coefficients(149553, 177741) == (69, -82)
+end
+

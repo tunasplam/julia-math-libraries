@@ -3,7 +3,6 @@
 =#
 
 include("./factor_number.jl")
-include("./gcd.jl")
 
 function terminates(a, b)
 	#=
