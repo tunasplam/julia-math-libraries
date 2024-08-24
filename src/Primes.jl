@@ -16,48 +16,34 @@ using Printf
 	p# = 2(3)(5)(7) ... p if p prime
 	p# = 2(3)(5)(7) ... p_i if p NOT prime where p_i biggest prime s.t. p_i < p
 =#
+# TODO
 # TODO if linear_sieve is faster then switch this over
-primorial(n::Int64) = reduce(*, prime_list_linear_sieve(n))
+# yeah this doesnt work. at all.
+# primorial(n::Int)::Int = reduce(*, primes_leq(n))
 
-#=
-	Generates 1#, 2#, ... , p_n#
-	Rememeber:
-	0# = 1# = 1
-	p# = 2(3)(5)(7) ... p if p prime
-	p# = 2(3)(5)(7) ... p_i if p NOT prime where p_i biggest prime s.t. p_i < p
-=#
-function primorial_list(n::Int64)
-	result = ones(n)
-	primes = prime_list_erat(n)
-	prim = 1
-	for p in 2:n
-		# if p prime then multiply it to our primorial.
-		if p in primes
-			prim *= p
-			result[p] = prim
-		# otherwise just use the result from before.
-		else
-			result[p] = result[p-1]
-		end
-	end
-	return result
-end
 
-# TODO estimates of prime counting function to get it so we can make
-# n close to the number of primes?
-function primorial_list_no_repeats(n::Int64)
-	primes = prime_list_erat(n)
+function primorial_list(n::Int)::Vector{Int}
+	#=
+	Returns a list of all primorials <= n
+
+	The idea of this algorithm is to generate the first 50
+	primorials and filter the list to return all values <= n.
+	=#
+
+	# Generate a list of primes up to this value
+	primes = primes_leq(50)
+	# build up primorials for all of the primes
 	result = ones(length(primes))
 	prim = 1
 	for i in eachindex(primes)
 		prim *= primes[i]
 		result[i] = prim
 	end
-	return result
+	return filter(x -> x <= n, result)
 end
 
 # determine whether or not a number is prime.
-function prime(n::Int64)
+function is_prime(n::Int64)::Bool
 	# NOTE remove this if you know n will never be 2 or 3 for
 	# more performance
 	if n == 2 || n == 3
@@ -69,7 +55,7 @@ function prime(n::Int64)
 	elseif n % 3 == 0
 		return false
 	else
-		r = floor(n^(0.5))
+		r = floor(Int, n^(0.5))
 		f = 5
 		while f <= r
 			if n % f == 0
@@ -84,12 +70,12 @@ function prime(n::Int64)
 	end
 end
 
-# Faster if n > 10^6
-function prime_list_erat(n::Int64)
+function primes_leq_erat(n::Int)::Vector{Int}
 	#=
 		This runs in O(n log n)
+		
+		DO NOT USE THIS. USE primes_leq INSTEAD.
 	=#
-	print("WARNING: prim_list_erat is SLOW and uses lots of RAM. use prime_list_linear_sieve instead.")
 	# Boolean array, indicies are 2 -> n
 	A = [true for i in 2:n]
 	lim = isqrt(n)
@@ -112,7 +98,7 @@ function prime_list_erat(n::Int64)
 	return A
 end
 
-function prime_list_linear_sieve(n::Int64)
+function primes_leq(n::Int64)::Vector{Int}
 	#=
 		This runs in O(n)
 		See this blog post
@@ -124,10 +110,15 @@ function prime_list_linear_sieve(n::Int64)
 		if the number is marked as prime, add it to primes.
 		mark all multiples of the prime as composite
 
-		Note that this likely requires much more RAM than prime_list_erat()
+		Note that this likely requires much more RAM than primes_leq_erat()
 		ACTUALLY ... NO. This is ENORMOUSLY superior to the erat method
 		IN EVERY WAY.
 	=#
+
+	if n == 2
+		return [2]
+	end
+
 	is_composite = [false for i in 2:n]
 	primes = Vector{Int64}(undef, 0)
 	for i in 2:(n-1)
@@ -152,28 +143,4 @@ function prime_list_linear_sieve(n::Int64)
 		end
 	end
 	return primes
-end
-
-function main()
-	lim = 10^7
-
-	@time p2 = prime_list_erat(lim)
-	@time p3 = prime_list_linear_sieve(lim)
-
-	@printf "%s .. %s\n" p2[1:10] p2[length(p2)-10:length(p2)]
-	@printf "%s .. %s\n" p3[1:10] p3[length(p3)-10:length(p3)]
-
-	println(length(p2))
-	println(length(p3))
-	@assert length(p2) == length(p3)
-
-	for i in eachindex(p2)
-		if p2[i] != p3[i]
-			@printf "%d %d != %d\n" i p2[i] p3[i]
-		end
-	end
-end
-
-if abspath(PROGRAM_FILE) == @__FILE__
-    main()
 end

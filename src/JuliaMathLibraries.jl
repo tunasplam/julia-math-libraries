@@ -14,4 +14,7 @@ include("GCD.jl")
 export prime_factors, prime_factorization, radical, radical_list, divisors
 include("FactorNumber.jl")
 
+export primes_leq_erat, primes_leq, is_prime, primorial_list, primorial
+include("Primes.jl")
+
 end
