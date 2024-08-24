@@ -212,3 +212,10 @@ end
     end
 end
 
+@testset "Addition.jl" begin
+    # Grab random numbers and use to test accuracy.
+	for i in 1:10
+		ns = map(abs, rand(Int64, 2))
+		@test add_lattice_alg(ns[1], ns[2]) == BigInt(ns[1]) + BigInt(ns[2])
+	end
+end

@@ -26,4 +26,7 @@ module JuliaMathLibraries
 
     export mobius_list, mobius
     include("Mobius.jl")
+
+    export add_lattice_alg
+    include("Addition.jl")
 end
