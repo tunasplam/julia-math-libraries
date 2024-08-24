@@ -2,9 +2,7 @@
 	Miscellaneous fractions stuff.
 =#
 
-include("./factor_number.jl")
-
-function terminates(a, b)
+function terminates(a::Int, b::Int)::Bool
 	#=
 	Returns true if terminating and false if repeating.
 	Cool little algorithm i figure out..
@@ -31,7 +29,6 @@ function terminates(a, b)
 	b ÷= fraction_gcd
 
 	# only concerned about the primes, not the powers.
-	p_fact = list_prime_divisors(b)
-	return all(x->x in [2,5], p_fact)
+	return all(x->x in [2,5], prime_factors(b))
 
 end

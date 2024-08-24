@@ -11,4 +11,7 @@ include("Fractions.jl")
 export gcd
 include("GCD.jl")
 
+export prime_factors, prime_factorization, radical, radical_list, divisors
+include("FactorNumber.jl")
+
 end

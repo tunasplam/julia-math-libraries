@@ -2,7 +2,7 @@
 
 using Printf
 
-function bezout_coefficients(a, b, solution=1)
+function bezout_coefficients(a::Int, b::Int, solution::Int=1)::Tuple{Int,Int}
 #=
 	https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm
 	For more on algorithm see gcd_extended_euclidean()
@@ -68,7 +68,7 @@ function bezout_coefficients(a, b, solution=1)
 	end
 end
 
-function gcd(a,b)
+function gcd(a::Int, b::Int)::Int
 	#=
 	https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm
 	Uses extended euclidean algorithm to find the gcd of two numbers.
@@ -126,7 +126,7 @@ function gcd(a,b)
 	return r_i_minus_one
 end
 
-function gcd_binary(a,b)
+function gcd_binary(a::Int, b::Int)::Int
 	#=
 	https://en.wikipedia.org/wiki/Binary_GCD_algorithm
 	Uses these three identities repeatively:
@@ -175,7 +175,7 @@ function gcd_binary(a,b)
 		# both a and b even
 		else
 			# identity 2
-			return 2 * gcd(a ÷ 2, b ÷ 2)
+			return 2 * gcd_binary(a ÷ 2, b ÷ 2)
 		end
 	end
 end
