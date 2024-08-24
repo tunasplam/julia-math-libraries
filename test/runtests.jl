@@ -117,3 +117,71 @@ end
     # @test primorial(5) == 2310
 
 end
+
+# Divisors
+@testset "Divisors.jl" begin
+    @test num_positive_divisors(1)    == 1
+    @test num_positive_divisors(2)    == 2
+    @test num_positive_divisors(6)    == 4
+    @test num_positive_divisors(28)   == 6
+    @test num_positive_divisors(30)   == 8
+    @test num_positive_divisors(100)  == 9
+    @test num_positive_divisors(360)  == 24
+    @test num_positive_divisors(1024) == 11
+
+    @test sigma_one_list(1)  == [1]
+    @test sigma_one_list(2)  == [1, 3]
+    @test sigma_one_list(3)  == [1, 3, 4]
+    @test sigma_one_list(4)  == [1, 3, 4, 7]
+    @test sigma_one_list(5)  == [1, 3, 4, 7, 6]
+    @test sigma_one_list(6)  == [1, 3, 4, 7, 6, 12]
+    @test sigma_one_list(7)  == [1, 3, 4, 7, 6, 12, 8]
+    @test sigma_one_list(8)  == [1, 3, 4, 7, 6, 12, 8, 15]
+    @test sigma_one_list(9)  == [1, 3, 4, 7, 6, 12, 8, 15, 13]
+    @test sigma_one_list(10) == [1, 3, 4, 7, 6, 12, 8, 15, 13, 18]
+
+    @test divisor_sum(1)  == 1
+    @test divisor_sum(2)  == 3
+    @test divisor_sum(3)  == 4
+    @test divisor_sum(4)  == 7
+    @test divisor_sum(5)  == 6
+    @test divisor_sum(6)  == 12
+    @test divisor_sum(7)  == 8
+    @test divisor_sum(8)  == 15
+    @test divisor_sum(9)  == 13
+    @test divisor_sum(10) == 18
+
+    @test sum_sigma_one_list(1)  == sum(num_positive_divisors(x) for x in 1:1)
+    @test sum_sigma_one_list(2)  == sum(num_positive_divisors(x) for x in 1:2)
+    @test sum_sigma_one_list(3)  == sum(num_positive_divisors(x) for x in 1:3)
+    @test sum_sigma_one_list(4)  == sum(num_positive_divisors(x) for x in 1:4)
+    @test sum_sigma_one_list(5)  == sum(num_positive_divisors(x) for x in 1:5)
+    @test sum_sigma_one_list(6)  == sum(num_positive_divisors(x) for x in 1:6)
+    @test sum_sigma_one_list(7)  == sum(num_positive_divisors(x) for x in 1:7)
+    @test sum_sigma_one_list(8)  == sum(num_positive_divisors(x) for x in 1:8)
+    @test sum_sigma_one_list(9)  == sum(num_positive_divisors(x) for x in 1:9)
+    @test sum_sigma_one_list(10) == sum(num_positive_divisors(x) for x in 1:10)
+
+    @test sigma_two(1)  == 1
+    @test sigma_two(2)  == 5
+    @test sigma_two(3)  == 10
+    @test sigma_two(4)  == 21
+    @test sigma_two(5)  == 26
+    @test sigma_two(6)  == 50
+    @test sigma_two(7)  == 50
+    @test sigma_two(8)  == 85
+    @test sigma_two(9)  == 91
+    @test sigma_two(10) == 130
+
+    @test num_positive_divisors_list(1)  == map(num_positive_divisors, 1:1)
+    @test num_positive_divisors_list(2)  == map(num_positive_divisors, 1:2)
+    @test num_positive_divisors_list(3)  == map(num_positive_divisors, 1:3)
+    @test num_positive_divisors_list(4)  == map(num_positive_divisors, 1:4)
+    @test num_positive_divisors_list(5)  == map(num_positive_divisors, 1:5)
+    @test num_positive_divisors_list(6)  == map(num_positive_divisors, 1:6)
+    @test num_positive_divisors_list(7)  == map(num_positive_divisors, 1:7)
+    @test num_positive_divisors_list(8)  == map(num_positive_divisors, 1:8)
+    @test num_positive_divisors_list(9)  == map(num_positive_divisors, 1:9)
+    @test num_positive_divisors_list(10) == map(num_positive_divisors, 1:10)
+
+end

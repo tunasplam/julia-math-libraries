@@ -35,16 +35,12 @@ see p153.jl for implementation
 
 =#
 
-include("./factor_number.jl")
-include("./primes.jl")
-using Printf
-
-function number_positive_divisors(num)
+function num_positive_divisors(num::Int)::Int
 	#=
 	FORMERLY CALLED generate_sigma and generate_sigma_zero
 	Counts the number of positive divisiors of num.
 
-	A couple of things that could spped this up:
+	A couple of things that could speed this up:
 	- This is multiplicative if gcd(n, m) = 1
 	- tau(p^k) = k + 1 for p prime.
 
@@ -52,57 +48,50 @@ function number_positive_divisors(num)
 	n = p1^r1 * p2^r2 *... * pk^rk
 	tau(n) = (r1 + 1)(r2 + 1) ... (rk + 1)
 	=#
-	p_fact = prime_factorize(num)
+	p_fact = prime_factorization(num)
 
 	tau = 1
 	# Prime factorization is list of tuples (prime, power)
 	for prime_pair in p_fact
-		tau *= prime_pair[2] + 1
+		@inbounds @fastmath tau *= prime_pair[2] + 1
 	end
-	#println(tau)
 	return tau
 end
 
-function generate_sigma_one(n)
+function divisor_sum(n::Int)::Int
 	#=
-	Gives us the SUM of the divisors.
+	Returns the sum of the divisors of the input
+
 	https://mathworld.wolfram.com/DivisorFunction.html
 	See equation 14 in the above link.
 	=#
-	sigma = []
-	for i in 1:n
-		p_fact = prime_factors(i)
-		total = 1
-		for factor in p_fact
-			total *= (factor[1]^(factor[2] + 1) - 1)÷(factor[1] - 1)
-		end
-		append!(sigma, total)
-	end
-	return sigma
-end
-
-function generate_sigma_two(n::Integer)
-	# find the divisors, then square them and sum them.
-	divisors = [1, n]
-	for i in 2:sqrt(n)-1
-		if n % i == 0
-			append!(divisors, i)
-			append!(divisors, n/i)
-		end
-	end
-	# check if perfect square
-	if n % sqrt(n) == 0
-		append!(divisors, sqrt(n))
-	end
-
-	total = 0
-	for div in divisors
-		total += div^2
+	total = 1
+	for factor in prime_factorization(n)
+		@inbounds @fastmath total *= (factor[1]^(factor[2] + 1) - 1)÷(factor[1] - 1)
 	end
 	return total
 end
 
-function divisor_sum_dirichlet_hyperbola(x)
+function sigma_one_list(n::Int)::Vector{Int}
+	#=
+	Gives us the SUM of the divisors for each of the first n integers.
+
+	Called 'sigma_one' because this sequence is the result of the
+	divisor function for k = 1
+
+	OEIS A000203
+	=#
+	return map(divisor_sum, 1:n)
+end
+
+function sigma_two(n::Int)::Int
+	#=
+	Determine the sum of the squares of the divisors of an integer.
+	=#
+	return reduce(+, map(x -> x^2, divisors(n)))
+end
+
+function sum_sigma_one_list(x::Int)::Int
 	#=
 		Sum of the # of divisors of n for n ≤ x
 
@@ -117,13 +106,13 @@ function divisor_sum_dirichlet_hyperbola(x)
 	=#
 	s = isqrt(x)
 	r = 0
-	for n in 1:s
-		r += x ÷ n
+	@inbounds for n in 1:s
+	@fastmath	r += x ÷ n
 	end
-	return 2r - s^2
+	@fastmath return 2r - s^2
 end
 
-function num_positive_divisors_linear_sieve(x::Int64)
+function num_positive_divisors_list(x::Int)::Vector{Int}
 	#=
 		See the header "Tangent: Linear Sieving"
 
@@ -134,18 +123,18 @@ function num_positive_divisors_linear_sieve(x::Int64)
 
 		OEIS: A000005
 	=#
-	d = Array{Int64}(undef, x)
+	d = zeros(x)
 
 	for k in 1:x
 		# increment d[k*j] for all multiples k*j <= x
-		for j in 1:(x ÷ k)
-			d[k*j] += 1
+		@inbounds @fastmath for j in 1:(x ÷ k)
+			@inbounds @fastmath d[k*j] += 1
 		end
 	end
 	return d
 end
 
-function kth_divisor_function_sum(x::Int64, k::Int64, m::Int64)
+function kth_divisor_function_sum(x::Int, k::Int, m::Int)::Int
 	#=
 		See "Algorithm (Computing D_k(x) iteratively)
 		https://gbroxey.github.io/blog/2023/04/30/mult-sum-1.html#summing-generalized-divisor-functions
@@ -165,9 +154,13 @@ function kth_divisor_function_sum(x::Int64, k::Int64, m::Int64)
 
 		TODO a version without mod to save time? does that matter?
 		TODO implement linear_sieve_prod_unit
+
+		TODO THIS DOES NOT WORK!
 	=#
+	print("WARNING. THIS DOES NOT WORK.")
+
 	# 1. set y on the order of x^(2/3)
-	y = Int64(floor(0.55*x^(2/3)))
+	y = Int(floor(0.55*x^(2/3)))
 	y = max(y, isqrt(x))
 
 	# this is the sequence that will be used for the sieve. Length y
@@ -176,7 +169,6 @@ function kth_divisor_function_sum(x::Int64, k::Int64, m::Int64)
 	# this is the array that will be updated using the hyperbola method. Length x/y
 	# initiliaze all elements to (x ÷ y) % m
 	big = [(x ÷ y) % m for i in 1:(x ÷ y)]
-
 
 	# iterate through each value of k
 	for j in 2:k
@@ -225,22 +217,4 @@ function kth_divisor_function_sum(x::Int64, k::Int64, m::Int64)
 		end
 	end
 	return Dk
-end
-
-function main()
-	test_set = sum([
-		1, 17, 82, 273, 626, 1394, 2402, 4369, 6643, 10642, 14642, 22386, 28562,
-		40834, 51332, 69905, 83522, 112931, 130322, 170898, 196964, 248914, 279842, 358258,
-		391251, 485554, 538084, 655746, 707282, 872644, 923522, 1118481, 1200644
-	])
-
-	@time res = kth_divisor_function_sum(3, 43, 10000000)
-
-	println(test_set)
-	println(res)
-
-end
-
-if abspath(PROGRAM_FILE) == @__FILE__
-    main()
 end
