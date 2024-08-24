@@ -29,4 +29,7 @@ module JuliaMathLibraries
 
     export add_lattice_alg
     include("Addition.jl")
+
+    export quadratic_formula
+    include("Quadratics.jl")
 end
