@@ -1,22 +1,5 @@
 # everything regarding factoring numbers goes here (DUH)
 
-function mobius(n)
-	#=
-	Mobius(n) tell us a few things:
-	mu(n) = -1 if n square free and odd # of divisors
-			0 if nonsquarefree
-			1 if square free and even # of divisors.
-	so |mu(n)| basically tells us if a number is squarefree.
-
-	https://en.wikipedia.org/wiki/M%C3%B6bius_function
-	For how this algorithm works see "Properties" heading.
-	Allows us to determine mu(n) without having to factor it.
-
-	Note figure out the "roots of unity" reference.
-	=#
-
-end
-
 function prime_factors(n::Int)::Vector{Int}
 
 	factors = []

@@ -192,3 +192,23 @@ end
     @test lowest_k_such_that_n_divides_k_factorial(6) == 3
     @test lowest_k_such_that_n_divides_k_factorial(7) == 7
 end
+
+@testset "Mobius.jl" begin
+    @test mobius(1)  == 1
+    @test mobius(2)  == -1
+    @test mobius(3)  == -1
+    @test mobius(4)  == 0
+    @test mobius(5)  == -1
+    @test mobius(6)  == 1
+    @test mobius(8)  == 0
+    @test mobius(9)  == 0
+    @test mobius(10) == 1
+    @test mobius(12) == 0
+    @test mobius(15) == 1
+    @test mobius(18) == 0
+
+    for i in 1:10
+        @test mobius_list(i) == map(mobius, 1:i)
+    end
+end
+

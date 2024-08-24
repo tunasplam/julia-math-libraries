@@ -23,4 +23,7 @@ module JuliaMathLibraries
 
     export factorial, lowest_k_such_that_n_divides_k_factorial
     include("Factorial.jl")
+
+    export mobius_list, mobius
+    include("Mobius.jl")
 end

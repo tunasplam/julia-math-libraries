@@ -1,9 +1,4 @@
-#=
-	Everything regarding squarefree numbers.
-	Mobius formula stuff in here too
-=#
-
-function generate_mobius_list(n)
+function mobius_list(n::Int)::Vector{Int}
 	#=
 	Generate first n entries of mobius list as quickly as possible.
 	A few things to note:
@@ -14,7 +9,6 @@ function generate_mobius_list(n)
 	=#
 	results = [2 for i in 1:n]
 	results[1] = 1
-	#results = Dict(1 => 1)
 	for num in 2:n
 		if results[num] == 2
 			res = mobius(num)
@@ -41,19 +35,5 @@ function mobius(n)
 			total += cos(2*MathConstants.pi*(k/n))
 		end
 	end
-	return(round(total))
+	return(round(Int, total))
 end
-
-function gcd(a,b)
-	if a == 0
-		return b
-	end
-	return gcd(b%a, a)
-end
-
-function main()
-	@time res = generate_mobius_list(10^4)
-	print(sum(res))
-end
-
-main()
