@@ -110,7 +110,6 @@ function radical_list(n::Int)::Vector{Int}
 end
 
 function divisors(n::Int)::Vector{Int}
-
 	divs = [1]
 
 	if n == 1

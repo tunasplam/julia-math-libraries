@@ -1,11 +1,8 @@
-include("./factor_number.jl")
-include("./linear_congruences.jl")
+#=
+Everything regarding factorials are here.
 
-
-function main()
-	lim = 10^9
-	println(last_k_digits_before_trailing_zeros_in_n_factorial(lim))
-end
+If you are looking for PRIMORIALS then go to Primes.jl
+=#
 
 mutable struct Factorial{T<:Integer}
 	prev_n::T
@@ -45,10 +42,12 @@ function Base.iterate(F::Factorial_mod_k, state=1)
 	end
 end
 
-function last_k_digits_before_trailing_zeros_in_n_factorial(n)
+function last_k_digits_before_trailing_zeros_in_n_factorial(n::Int)::Vector{Int}
 	#=
 	As the title implies.
 	So for 11! = 39916800 returns 99168
+
+	TODO SUPPOSEDLY THIS DOES NOT WORK
 
 	How it works:
 	Every time a 5 appears in the prime factorization of i then a zero is added
@@ -80,16 +79,13 @@ function last_k_digits_before_trailing_zeros_in_n_factorial(n)
 
 		while fact % 10 == 0
 			fact ÷= 10
-			#println(i, "!")
 		end
-		#println("====================================================")
 		fact %= 10^5
-		#println(i, " ", fact)
 	end
 	return fact
 end
 
-function lowest_k_such_that_n_divides_k_factorial(n)
+function lowest_k_such_that_n_divides_k_factorial(n::Int)::Int
 	#=
 	A mouthful but an interesting algorithm I guess.
 
@@ -106,8 +102,8 @@ function lowest_k_such_that_n_divides_k_factorial(n)
 	that this is a project euler problem!
 	=#
 
-	p_fact = prime_factorize(n)
-	max_k = 0
+	p_fact = prime_factorization(n)
+	max_k = 1
 	for factor in p_fact
 		# find lowest k_i s.t. p_t^r_i | (k_i)!
 		# TODO TODO TODO TODO
@@ -116,26 +112,25 @@ function lowest_k_such_that_n_divides_k_factorial(n)
 		num_factors = 0
 		k = 0
 		# instead of 10 the power of the prime we are checking.
-		while num_factors < factor[2]
-			num_factors += 1
-			k += 1
+		@inbounds while num_factors < factor[2]
+			@fastmath num_factors += 1
+			@fastmath k += 1
 			power = 1
-			while k >= factor[1]^power
-				if k % factor[1]^power == 0
-					#@printf "Adding 1 for %d\n" k
-					num_factors += 1
+			@inbounds @fastmath while k >= factor[1]^power
+				@inbounds @fastmath if k % factor[1]^power == 0
+					@fastmath num_factors += 1
 				end
-				power += 1
+				@fastmath power += 1
 			end
 		end
-		if factor[1] * k > max_k
-			max_k = factor[1] * k
+		@inbounds @fastmath if factor[1] * k > max_k
+			@inbounds @fastmath max_k = factor[1] * k
 		end	
 	end
 	return max_k
 end
 
-function factorial_mod(n, m)
+function factorial_mod(n::Int, m::Int)::Int
 	#=
 	Figure out what n! % m is!
 	Note that mod works nice splitting up across multiplication.
@@ -152,7 +147,7 @@ function factorial_mod(n, m)
 	return product
 end
 
-function last_k_digits_of_n_factorial(n, k)
+function last_k_digits_of_n_factorial(n::Int, k::Int)::Int
 	fact = 1
 	for i in 1:n
 		fact *= i
@@ -160,5 +155,3 @@ function last_k_digits_of_n_factorial(n, k)
 	end
 	return fact
 end
-
-@time main()

@@ -18,8 +18,9 @@ module JuliaMathLibraries
     include("Primes.jl")
 
     export num_positive_divisors, sigma_one_list, divisor_sum,
-    sigma_two, sum_sigma_one_list, num_positive_divisors_list
-    
+    sigma_two, sum_sigma_one_list, num_positive_divisors_list    
     include("Divisors.jl")
 
+    export factorial, lowest_k_such_that_n_divides_k_factorial
+    include("Factorial.jl")
 end

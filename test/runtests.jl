@@ -23,7 +23,6 @@ end
 
 # GCD
 @testset "GCD.jl" begin
-
     # GCD
     @test J.gcd(10, 1) == 1
     @test J.gcd(5, 2) == 1
@@ -115,7 +114,6 @@ end
     # @test primorial(3) == 30
     # @test primorial(4) == 210
     # @test primorial(5) == 2310
-
 end
 
 # Divisors
@@ -183,5 +181,14 @@ end
     @test num_positive_divisors_list(8)  == map(num_positive_divisors, 1:8)
     @test num_positive_divisors_list(9)  == map(num_positive_divisors, 1:9)
     @test num_positive_divisors_list(10) == map(num_positive_divisors, 1:10)
+end
 
+@testset "Factorial.jl" begin
+    @test lowest_k_such_that_n_divides_k_factorial(1) == 1
+    @test lowest_k_such_that_n_divides_k_factorial(2) == 2
+    @test lowest_k_such_that_n_divides_k_factorial(3) == 3
+    @test lowest_k_such_that_n_divides_k_factorial(4) == 4
+    @test lowest_k_such_that_n_divides_k_factorial(5) == 5
+    @test lowest_k_such_that_n_divides_k_factorial(6) == 3
+    @test lowest_k_such_that_n_divides_k_factorial(7) == 7
 end
