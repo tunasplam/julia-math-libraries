@@ -27,6 +27,8 @@ function add_lattice_alg(x::Int, y::Int)::BigInt
 		append a_2 (carried over tens place from last addition)
 	- append extra digits from x (if present)
 =#
+	println("WARNING: This is much slower than basic Julia addition.")
+
 	if x < 0
 		throw(DomainError(x, "must be positive or 0"))
 	end
