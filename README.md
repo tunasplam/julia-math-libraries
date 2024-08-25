@@ -6,6 +6,21 @@ Some of these algorithms are my original work. Some of them are from number theo
 
 Please note that not everything has been thoroughly tested. For the most part, once the library accomplished what I needed it to do I left it until it was needed at another time.
 
+From now on, only add to this library if the method is tried-and-true. experimental stuff
+should stay with their respective problem in project-euler-solutions private repo.
+
+# Test
+julia REPL:
+```
+] activate .
+test
+```
+
+# Build
+julia REPL:
+```
+] dev .
+```
 ## Algorithms Covered
 
 ### addition_algorithms.jl

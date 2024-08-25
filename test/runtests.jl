@@ -219,3 +219,17 @@ end
 		@test add_lattice_alg(ns[1], ns[2]) == BigInt(ns[1]) + BigInt(ns[2])
 	end
 end
+
+@testset "Fibonnaci.jl" begin
+    for (i, f) in enumerate(fibonnaci(10))
+        if i == 1
+            @test f == 1
+        elseif i == 2
+            @test f == 1
+        elseif i == 5
+            @test f == 5
+        elseif i == 10
+            @test f == 55
+        end
+    end
+end

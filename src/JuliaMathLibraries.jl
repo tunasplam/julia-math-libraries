@@ -32,4 +32,7 @@ module JuliaMathLibraries
 
     export quadratic_formula
     include("Quadratics.jl")
+
+    export fibonnaci
+    include("Fibonnaci.jl")
 end
