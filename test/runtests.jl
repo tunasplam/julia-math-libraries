@@ -253,4 +253,10 @@ end
     @test is_palindrome(1001) == true
     @test is_palindrome(1234321) == true
     @test is_palindrome(1234567) == false
+
+    @test palindromic_products_of_numbers_with_n_digits(1) == []
+    @test maximum(palindromic_products_of_numbers_with_n_digits(2)) == 9009
+    @test minimum(palindromic_products_of_numbers_with_n_digits(2)) == 121
+    @test length(palindromic_products_of_numbers_with_n_digits(2)) == 73
 end
+
