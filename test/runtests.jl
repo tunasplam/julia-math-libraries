@@ -259,4 +259,3 @@ end
     @test minimum(palindromic_products_of_numbers_with_n_digits(2)) == 121
     @test length(palindromic_products_of_numbers_with_n_digits(2)) == 73
 end
-

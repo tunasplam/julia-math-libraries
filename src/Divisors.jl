@@ -112,6 +112,29 @@ function sum_sigma_one_list(x::Int)::Int
 	@fastmath return 2r - s^2
 end
 
+function min_num_divisible_by_primes_leq_k(k::Int)::BigInt
+	#=
+	You could just find LCM of all primes leq k.
+	but this works efficiently for large inputs
+	=#
+	N, i = 1, 1
+	check = true
+	limit = floor(Int, sqrt(k))
+	primes = primes_leq(k)
+	for prime in primes
+		prime_power = 1
+		if check
+			if primes[i] <= limit
+				prime_power = floor(Int, log10(k) / log10(prime) )
+			else
+				check = false
+			end
+		end
+		N = N * prime ^ prime_power
+	end
+	return N
+end
+
 function num_positive_divisors_list(x::Int)::Vector{Int}
 	#=
 		See the header "Tangent: Linear Sieving"
