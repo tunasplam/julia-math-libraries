@@ -233,3 +233,16 @@ end
         end
     end
 end
+
+@testset "Misc.jl" begin
+    @test is_palindrome(1) == true
+    @test is_palindrome(22) == true
+    @test is_palindrome(121) == true
+    @test is_palindrome(12321) == true
+    @test is_palindrome(12345) == false
+    @test is_palindrome(1221) == true
+    @test is_palindrome(1331) == true
+    @test is_palindrome(1001) == true
+    @test is_palindrome(1234321) == true
+    @test is_palindrome(1234567) == false
+end

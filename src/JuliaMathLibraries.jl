@@ -35,4 +35,7 @@ module JuliaMathLibraries
 
     export fibonnaci
     include("Fibonnaci.jl")
+
+    export is_palindrome
+    include("Misc.jl")
 end
