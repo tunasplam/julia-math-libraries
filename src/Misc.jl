@@ -1,13 +1,6 @@
-#=
-If it does not have an easy home, like palindromic numebers,
-then put it here.
-=#
+# anything that does not quite fit anywhere else goes here.
 
-function is_palindrome(n::Int)::Bool
-    return n == reverse(n)
-end
-
-function reverse(n::Int)::Int
+function reverse_digits(n::Int)::Int
     reversed = 0
     while n > 0
         reversed = 10*reversed + n % 10

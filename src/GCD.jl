@@ -126,6 +126,29 @@ function gcd(a::Int, b::Int)::Int
 	return r_i_minus_one
 end
 
+function gcd(A::Vector{Int})::Int
+	#=
+	Returns the gcd of a given list of numbers.
+	Factors each number and finds the highest common element in the list
+	=#
+	factors = map(divisors, A)
+
+	# flatten the factors but only keep values that are present in all
+	# lists
+	unique_factors = Iterators.flatten(factors) |>
+	unique |>
+	reverse
+
+	for x in unique_factors
+		if all(x in factors[i] for i in eachindex(factors))
+			# iterating from largest to smallest so return first
+			# common divisor found
+			return x
+		end
+	end
+	return 1
+end
+
 function gcd_binary(a::Int, b::Int)::Int
 	#=
 	https://en.wikipedia.org/wiki/Binary_GCD_algorithm

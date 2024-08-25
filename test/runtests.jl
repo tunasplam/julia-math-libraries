@@ -32,6 +32,14 @@ end
     @test J.gcd(24, 36) == 12
     @test J.gcd(30, 20) == 10
 
+    # GCD of a list of numbers
+    @test J.gcd([10, 20, 30]) == 10
+    @test J.gcd([7, 11, 13]) == 1
+    @test J.gcd([2, 4, 7]) == 1
+    @test J.gcd([4, 16, 24]) == 4
+    @test J.gcd([25, 50, 85]) == 5
+    @test J.gcd([2, 4, 6, 8, 10]) == 2
+
     # GCD Binary
     @test J.gcd_binary(10, 1) == 1
     @test J.gcd_binary(5, 2) == 1
@@ -234,7 +242,7 @@ end
     end
 end
 
-@testset "Misc.jl" begin
+@testset "PalindromicNumbers.jl" begin
     @test is_palindrome(1) == true
     @test is_palindrome(22) == true
     @test is_palindrome(121) == true

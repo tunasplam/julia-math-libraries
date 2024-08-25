@@ -37,5 +37,8 @@ module JuliaMathLibraries
     include("Fibonnaci.jl")
 
     export is_palindrome
+    include("PalindromicNumbers.jl")
+
+    export reverse_digits
     include("Misc.jl")
 end
