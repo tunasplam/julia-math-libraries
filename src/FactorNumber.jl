@@ -8,37 +8,26 @@ function prime_factors(n::Int)::Vector{Int}
 		return []
 	end
 
-	# if even, add that factor and keep dividing out 2's til we
-	# can no longer.
-	if n % 2 == 0
-		push!(factors, 2)
-
-		n ÷= 2
-		while n % 2 == 0
-			n ÷= 2
+	# TODO can you reduce these bounds lower than n?
+	for p in primes_leq(n)
+		if n % p == 0
+			n ÷= p
+			push!(factors, p)
 		end
 	end
-
-	# now starting at 3, check every odd number up to sqrt(n)
-	factor = 3
-	max_factor = floor(n^(0.5))
-	for factor in 3:2:max_factor
-
-		if n % factor == 0
-			n ÷= factor
-			push!(factors, factor)
-
-			max_factor = floor(n^(0.5))
-		end
-		factor += 2
-	end
-
 	# if here then n has been reduced to last prime factor.
 	# push and return it.
-	return push!(factors, n)
+	if n ∉ factors && is_prime(n)
+		return push!(factors, n)
+	end
+
+	# if here then n has been reduced to the product of the
+	# duplicate factors. discard it.
+	return factors
 
 end
 
+# TODO i think this is wrong too
 function prime_factorization(n::Int)::Vector{Tuple{Int,Int}}
 	# get the twos first
 	power, factorization = 0, []

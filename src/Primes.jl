@@ -46,6 +46,10 @@ end
 function is_prime(n::Int64)::Bool
 	# NOTE remove this if you know n will never be 2 or 3 for
 	# more performance
+	if n == 1
+		return false
+	end
+
 	if n == 2 || n == 3
 		return true
 	end
@@ -109,10 +113,6 @@ function primes_leq(n::Int64)::Vector{Int}
 		Iterate through numbers from 2:n
 		if the number is marked as prime, add it to primes.
 		mark all multiples of the prime as composite
-
-		Note that this likely requires much more RAM than primes_leq_erat()
-		ACTUALLY ... NO. This is ENORMOUSLY superior to the erat method
-		IN EVERY WAY.
 	=#
 
 	if n == 2
