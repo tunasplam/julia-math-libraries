@@ -8,8 +8,7 @@ function prime_factors(n::Int)::Vector{Int}
 		return []
 	end
 
-	# TODO can you reduce these bounds lower than n?
-	for p in primes_leq(n)
+	for p in primes_leq(n÷2)
 		if n % p == 0
 			n ÷= p
 			push!(factors, p)

@@ -28,6 +28,8 @@ end
     @test sort(prime_factorization(1),  by=x -> x[1], rev=true) == []
     @test sort(prime_factorization(15), by=x -> x[1], rev=true) == [(5, 1), (3, 1)]
     @test sort(prime_factorization(28), by=x -> x[1], rev=true) == [(7, 1), (2, 2)]
+    @test sort(prime_factorization(360), by=x -> x[1], rev=true) == [(5, 1), (3, 2), (2, 3)]
+    @test sort(prime_factorization(1242), by=x -> x[1], rev=true) == [(23, 1), (3, 3), (2, 1)]
 
     @test sort(divisors(6),  rev=true) == [6, 3, 2, 1]
     @test sort(divisors(10), rev=true) == [10, 5, 2, 1]
