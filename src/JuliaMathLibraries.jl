@@ -42,4 +42,7 @@ module JuliaMathLibraries
 
     export reverse_digits
     include("Misc.jl")
+
+    export subsequences
+    include("Sequence.jl")
 end

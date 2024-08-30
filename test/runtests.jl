@@ -12,6 +12,17 @@ end
 #     @test J.square_root_digits(3,11) == 1.73205080756
 # end
 
+# Sequences
+@testset "Sequence.jl" begin
+    @test J.subsequences([1, 2, 3]) == [
+        [1], [1, 2], [1, 2, 3], [2], [2, 3], [3]
+    ]
+    @test J.subsequences(sort(J.divisors(8))) == [
+        [1], [1, 2], [1, 2, 4], [1, 2, 4, 8], [2],
+        [2, 4], [2, 4, 8], [4], [4, 8], [8]
+    ]
+
+end
 
 # FactorNumber
 @testset "FactorNumber.jl" begin
