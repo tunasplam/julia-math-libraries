@@ -15,6 +15,7 @@ end
 
 # FactorNumber
 @testset "FactorNumber.jl" begin
+    @test sort(prime_factors(7),  rev=true) == [7]
     @test sort(prime_factors(6),  rev=true) == [3, 2]
     @test sort(prime_factors(10), rev=true) == [5, 2]
     @test sort(prime_factors(1),  rev=true) == []

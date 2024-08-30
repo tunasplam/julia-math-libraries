@@ -1,31 +1,51 @@
 # everything regarding factoring numbers goes here (DUH)
 
 function prime_factors(n::Int)::Vector{Int}
+	#=
+	Here is benchmarks comparing this algorithm to an algorithm
+	where all of the primes leq n/2 are sieved and then iterated through
+	to check for factors
+
+		sieve approach
+	Range (min … max):  1.299 ns … 47.750 ns  ┊
+	Time  (median):     1.320 ns              ┊
+	Time  (mean ± σ):   1.419 ns ±  0.835 ns  ┊
+
+		this approach
+	Range (min … max):  1.290 ns … 21.320 ns  ┊
+	Time  (median):     1.310 ns              ┊
+	Time  (mean ± σ):   1.392 ns ±  0.357 ns  ┊
+
+	=#
 
 	factors = []
 
-	if n == 1
-		return []
+	# get the twos first
+	if n % 2 == 0
+		push!(factors, 2)
+	end
+	while n % 2 == 0
+		n ÷= 2
 	end
 
-	for p in primes_leq(n÷2)
-		if n % p == 0
-			n ÷= p
-			push!(factors, p)
+	# iterate odd numbers and divide them out if they divide cleanly.
+	# you will never get a composite this way.
+	limit = floor(Int, sqrt(n))
+	for i in 3:2:limit
+		if n % i == 0
+			push!(factors, i)
+		end
+		while n % i == 0
+			n ÷= i
 		end
 	end
-	# if here then n has been reduced to last prime factor.
-	# push and return it.
-	if n ∉ factors && is_prime(n)
-		return push!(factors, n)
+
+	# if n > 2 then it has been reduced to its final prime factor
+	if n > 2
+		push!(factors, n)
 	end
-
-	# if here then n has been reduced to the product of the
-	# duplicate factors. discard it.
 	return factors
-
 end
-
 # TODO i think this is wrong too
 function prime_factorization(n::Int)::Vector{Tuple{Int,Int}}
 	# get the twos first

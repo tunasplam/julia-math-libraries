@@ -21,6 +21,19 @@ julia REPL:
 ```
 ] dev .
 ```
+
+# Benchmark
+Below is an example of using `BenchmarkTools` to compare two functions `prime_factors(x::Int)` and `prime_factors_2(x::Int)`. Notice that the setup provides a list of random Integers (`BenchmarkTools` intelligently picks the amount of samples to generate).
+
+julia REPL:
+```
+using JuliaMathLibraries
+const J = JuliaMathLibraries
+
+@benchmark J.prime_factors setup=(x=rand(Int, 10^5))
+@benchmark J.prime_factors_2 setupp=(x=rand(Int, 10^5))
+```
+
 ## Algorithms Covered
 
 ### addition_algorithms.jl
