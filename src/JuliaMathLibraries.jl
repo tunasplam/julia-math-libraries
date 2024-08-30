@@ -11,7 +11,8 @@ module JuliaMathLibraries
     export gcd
     include("GCD.jl")
 
-    export prime_factors, prime_factorization, radical, radical_list, divisors
+    export prime_factors, prime_factorization, radical, radical_list, divisors,
+    proper_divisors
     include("FactorNumber.jl")
 
     export primes_leq_erat, primes_leq, is_prime, primorial_list, primorial

@@ -125,3 +125,27 @@ function divisors(n::Int)::Vector{Int}
 	append!(divs, n)
 	return divs
 end
+
+function proper_divisors(n::Int)::Vector{Int}
+	divs = []
+
+	if n == 1
+		return divs
+	end
+
+	# check perfect square
+	if isinteger(sqrt(n))
+		append!(divs, Int(sqrt(n)))
+		return divs
+	end
+
+	lim = floor(Int, sqrt(n))
+	for i in 2:lim
+		if n % i == 0
+			append!(divs, i)
+			append!(divs, n ÷ i)
+		end
+	end
+
+	return divs
+end
