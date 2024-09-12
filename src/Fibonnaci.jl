@@ -48,6 +48,8 @@ function Base.iterate(F::Fibonnaci, state=1)
 	end
 end
 
+Base.length(F::Fibonnaci) = F.n
+
 #=
 	Generates the fibonnaci sequence mod some integer k. Values never rise
 	above k :) Will be very very fast for us.

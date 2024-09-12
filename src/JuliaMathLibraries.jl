@@ -46,4 +46,10 @@ module JuliaMathLibraries
 
     export subsequences
     include("Sequence.jl")
+
+    export variance, variance_2, mean
+    include("Statistics.jl")
+
+    export partition_function_p
+    include("Partitions.jl")
 end

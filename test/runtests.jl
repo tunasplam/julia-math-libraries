@@ -12,6 +12,23 @@ end
 #     @test J.square_root_digits(3,11) == 1.73205080756
 # end
 
+# Partitions
+@testset "Partitions.jl" begin
+    P = J.partition_function_p(100)
+    @test P[1]  == 1
+    @test P[5]  == 7
+    @test P[10] == 42
+    @test P[15] == 176
+    @test P[20] == 627
+    @test P[49] == 173525
+end
+
+# Statistics
+@testset "Statistics.jl" begin
+    @test J.variance([1, 2, 3, 4]) == 1.25
+    @test J.mean([1,2,3,4]) == 2.5
+end
+
 # Sequences
 @testset "Sequence.jl" begin
     @test J.subsequences([1, 2, 3]) == [

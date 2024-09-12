@@ -139,35 +139,4 @@ function check_sequence_for_cycle(seq)
 	end
 end
 
-function subsequences(seq)
-	#=
-	Find the subsequences of a sequence.
-	Note that these are ordered:
-
-	so 1,2,3
-	gives
-	1, 12, 123, 2, 23, 3
-
-	input should be a list of strings.
-
-	TODO
-	result should have length n(n+1)/2
-	this might make things more efficient
-	=#
-	
-	# go through each value in seq and add on values and append until
-	# you reach the end. Then start with the next value.
-	for i in 1:length(seq)
-		tstr = seq[i]
-		append!(result, [tstr])
-		j = 1
-		while i + j <= length(seq)
-			tstr *= seq[i+j]
-			append!(result, [tstr])
-			j += 1
-		end
-	end
-	return result
-end
-
 # main()
