@@ -12,6 +12,8 @@ see p153.jl for implementation
 
 =#
 
+
+
 #=
 	TODO Make this a function:
 	For a number n, count how many times some prime p will be a prime factor of all
@@ -34,6 +36,57 @@ see p153.jl for implementation
 	C(n, p) = sum_{1}^{floor(log_p n)} = i * ( floor(n/p^i) - floor(n^{p^i+1}) )
 
 =#
+
+function divisors(n::Int)::Vector{Int}
+	divs = [1]
+
+	if n == 1
+		return divs
+	end
+
+	# check perfect square
+	if isinteger(sqrt(n))
+		append!(divs, Int(sqrt(n)))
+		append!(divs, n)
+		return divs
+	end
+
+	lim = floor(Int, sqrt(n))
+	for i in 2:lim
+		if n % i == 0
+			append!(divs, i)
+			append!(divs, n ÷ i)
+		end
+	end
+
+	append!(divs, n)
+	return divs
+end
+
+function proper_divisors(n::Int)::Vector{Int}
+
+	if n == 1
+		return []
+	end
+
+	divs = [1]
+
+	# check perfect square
+	if isinteger(sqrt(n))
+		append!(divs, Int(sqrt(n)))
+		return divs
+	end
+
+	lim = floor(Int, sqrt(n))
+	for i in 2:lim
+		if n % i == 0
+			append!(divs, i)
+			append!(divs, n ÷ i)
+		end
+	end
+
+	return divs
+end
 
 function num_positive_divisors(num::Int)::Int
 	#=

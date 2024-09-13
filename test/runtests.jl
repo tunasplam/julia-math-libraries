@@ -245,21 +245,21 @@ end
 end
 
 @testset "Mobius.jl" begin
-    @test mobius(1)  == 1
-    @test mobius(2)  == -1
-    @test mobius(3)  == -1
-    @test mobius(4)  == 0
-    @test mobius(5)  == -1
-    @test mobius(6)  == 1
-    @test mobius(8)  == 0
-    @test mobius(9)  == 0
-    @test mobius(10) == 1
-    @test mobius(12) == 0
-    @test mobius(15) == 1
-    @test mobius(18) == 0
+    @test μ(1)  == 1
+    @test μ(2)  == -1
+    @test μ(3)  == -1
+    @test μ(4)  == 0
+    @test μ(5)  == -1
+    @test μ(6)  == 1
+    @test μ(8)  == 0
+    @test μ(9)  == 0
+    @test μ(10) == 1
+    @test μ(12) == 0
+    @test μ(15) == 1
+    @test μ(18) == 0
 
     for i in 1:10
-        @test mobius_list(i) == map(mobius, 1:i)
+        @test μ_leq(i) == map(μ, 1:i)
     end
 end
 
