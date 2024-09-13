@@ -50,6 +50,6 @@ module JuliaMathLibraries
     export variance, variance_2, mean
     include("Statistics.jl")
 
-    export partition_function_p
+    export partition_function_p_list, num_partitions_n_into_prime_parts_list
     include("Partitions.jl")
 end

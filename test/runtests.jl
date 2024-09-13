@@ -14,13 +14,22 @@ end
 
 # Partitions
 @testset "Partitions.jl" begin
-    P = J.partition_function_p(100)
+    P = J.partition_function_p_list(100)
     @test P[1]  == 1
     @test P[5]  == 7
     @test P[10] == 42
     @test P[15] == 176
     @test P[20] == 627
     @test P[49] == 173525
+
+    B = J.num_partitions_n_into_prime_parts_list(100)
+    @test B[1]  == 0
+    @test B[2]  == 1
+    @test B[5]  == 2
+    @test B[10] == 5
+    @test B[15] == 12
+    @test B[20] == 26
+    @test B[49] == 744
 end
 
 # Statistics

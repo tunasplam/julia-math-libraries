@@ -12,7 +12,7 @@ Anything that regards partitioning things goes into here.
 
 using OffsetArrays
 
-function partition_function_p(n::Integer)::Vector{Int}
+function partition_function_p_list(n::Int)::Vector{Int}
     #=
     OEIS A000041
 
@@ -51,4 +51,36 @@ function partition_function_p(n::Integer)::Vector{Int}
     end
 
     return P[1:n]
+end
+
+function num_partitions_n_into_prime_parts_list(N::Int)::Vector{Int}
+    #=
+    OEIS A000607
+
+    See equations 5 through 8 in the mathworld link below.
+    We are Euler transforming the sequence a_n (the prime indicator function)
+    to b_n (our target sequence).
+
+    essentially, we are using equation 8
+
+    https://mathworld.wolfram.com/EulerTransform.html
+    =#
+
+    # NOTE have done benchmarks in benchmarks/is_Prime.jl that suggest
+    # using J.is_prime for checking prime is pretty fast.
+
+    # stash all values of sequence b_n here
+    B = zeros(Int, N)
+    B[1:10] = [0, 1, 1, 1, 2, 2, 3, 3, 4, 5]
+    if N ≤ 10
+        return B[1:N]
+    end    
+    # NOTE that c_n is essentially the sum of the prime factors of k
+    c(n) = sum(prime_factors(n))
+
+    for n in 1:N
+        # tried to mirror it as closely to the mathworld formula as possible
+        B[n] = (c(n) + sum([c(k)*B[n-k] for k in 1:n-1])) ÷ n
+    end
+    return B
 end
