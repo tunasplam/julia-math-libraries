@@ -25,7 +25,7 @@ module JuliaMathLibraries
     export factorial, lowest_k_such_that_n_divides_k_factorial
     include("Factorial.jl")
 
-    export μ_leq, μ
+    export μ_leq, μ, count_squarefree_numbers_lt
     include("Mobius.jl")
 
     export add_lattice_alg

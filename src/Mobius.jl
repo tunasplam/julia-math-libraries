@@ -52,7 +52,9 @@ function μ(n)
 end
 
 @memoize function not_as_good_mobius(n::Integer)::Integer
-	#= T
+	#=	Slower at both individual computation as well as list
+		generation than the current implementation of μ.
+
 		See the "Sage" implementation of A008683.
 		An incredibly beautiful recursive solution.
 		Slightly slower than the other mobius function though.
@@ -69,8 +71,27 @@ end
 	Square free numbers specific stuff below.
 	Maybe one day it will be its own file.
 =#
-
 function count_squarefree_numbers_lt(n::Integer)::Integer
+	# A013928
+	# we want to put as restrictive of a cap on the largest value
+	# of μ needed as possible.
+	
+	if n < 1
+		throw(DomainError)
+	elseif n == 1
+		return 0
+	end
+
+	# here are some options to benchmark
+	# passing
+	return sum([μ(d) * floor(Int, (n-1)/d^2) for d in 1:floor(Int, sqrt(n-1))])
+	# NOTE this one is not passing tests and i wonder if the formula itself
+	# is suspicious
+	#return sum([μ(k) * floor(Int, n/k^2) for k in 1:floor(Int, sqrt(n))])
+
+end
+
+function count_squarefree_numbers_lt_old(n::Integer)::Integer
     #=
     Incredibly beautiful implementation of A013928.
     It is, however, ridiculously slow and space intensive. It involves
@@ -81,9 +102,7 @@ function count_squarefree_numbers_lt(n::Integer)::Integer
 
     if n < 1
         throw(DomainError)
-    end
-
-    if n == 1
+	elseif n == 1
         return 0
     end
 

@@ -261,6 +261,16 @@ end
     for i in 1:10
         @test μ_leq(i) == map(μ, 1:i)
     end
+
+    @test count_squarefree_numbers_lt(1) == 0
+    @test count_squarefree_numbers_lt(2) == 1
+    @test count_squarefree_numbers_lt(3) == 2
+    @test count_squarefree_numbers_lt(4) == 3
+    @test count_squarefree_numbers_lt(5) == 3
+    @test count_squarefree_numbers_lt(10) == 6
+    @test count_squarefree_numbers_lt(17) == 11
+    @test count_squarefree_numbers_lt(76) == 47
+
 end
 
 @testset "Addition.jl" begin
