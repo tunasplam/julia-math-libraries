@@ -1,4 +1,8 @@
 # julia-math-libraries
+
+# TODO i want beautiful professional looking julia docs
+# that pop up when you hover over a function in VSCode.
+
 Some math libraries that I made for usage while solving Project Euler problems
 https://projecteuler.net/
 

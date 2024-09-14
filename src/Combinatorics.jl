@@ -35,8 +35,6 @@ function Base.iterate(C::Iterate_Combinations, index=1)
         return nothing
     end
 
-    @show index, 2^C.n
-
     # represent index as bitstring and grab the rightmost n digits
     # yield the new value and the new index
     return bitstring(index)[end-(C.n-1):end], index + 1
