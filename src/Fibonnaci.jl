@@ -7,47 +7,71 @@
 =#
 
 #=
-	mutable - can change the fields
-	struct - its a class
-	T <: Integer - takes any type T that is a subtype of Integer
+	mutable structs -> structs which you can change the fields of
+	this struct represents a term of the Fibonnaci sequence
+	and is iterable.
+	
+	Parameters:
+	T <: Integer - values of the sequence are type T that is a
+		subtype of Integer. This lets this work on BigInts
+
+	Properties:
+	last2::Tuple{T,T} - the previous two terms in the fibonnaci seq
+	n::Int - the number of terms we wish to generate (stop condition)
+
+	It may be helpful to think of these like Recurisve CTEs in postgres
+	and the process of proof by induction. We have an initial case, an
+	inductive step, and a stop condition.
+
+	example:
+		for i in fibonnaci(10)
+	loops over the first 10 terms of the sequence
+
+	for big ints:
+		for i in fibonnaci(10^14, BigInt)
+
 =#
+
 mutable struct Fibonnaci{T<:Integer}
-	# The last two values stored as a tuple of type T
 	last2::Tuple{T, T}
-	# nth term in sequence
 	n::Int
 end
 
-# explicitly listing out the different ways that the constructor
-# handles different types of args.
-# NOTE THAT WE SEED THE LAST TWO VALUES HERE!
-function fibonnaci(n::Integer) 
+#=
+	this is the 'initial' state of the iterator
+	Kicks off the 'induction steps' by providing the initial
+	two terms of the sequence as well as the stop condition
+
+	Notice that it returns the struct that represents the 1st
+	term in the fibonnaci seq
+=#
+function fibonnaci(n::Integer)
 	return Fibonnaci((0,1), n)
 end
 
 # T allows us to use BigInts instead of Ints.
-# Called like fibonnaci(10^14, BigInt)
 function fibonnaci(n::Integer, T::Type)
 	return Fibonnaci{T}((0,1), n)
 end
 
-# State default set to 1. Theres a reason why i just dunno how to explain.
-function Base.iterate(F::Fibonnaci, state=1)
-	if state == 1
+# i is which index in the sequence the iterator is at
+# this returns a tuple where the first value is the ith fib term
+# and i is the next index.
+function Base.iterate(F::Fibonnaci, i=1)
+	if i == 1
 		# If at the initial condition, return 1 (the first)
-		# Fibonnaci value as well as 2 for state
-		(1, 2)
-	# check end condition, if there will be one.
-	elseif state > F.n
-		nothing
+		# Fibonnaci value as well as 2 for index
+		return 1, 2
+	# check stop condition
+	elseif i > F.n
+		return nothing
 	else
 		# Set the last2 values to be the new last two values
 		F.last2 = F.last2[2], sum(F.last2)
-		# "yield" the new value and the new state
-		(F.last2[2], state + 1)
+		# "yield" the new value and the next index
+		return F.last2[2], i + 1
 	end
 end
-
 Base.length(F::Fibonnaci) = F.n
 
 #=
@@ -74,79 +98,61 @@ function Base.iterate(F::Fibonnanci_mod_k, state=1)
 		(F.last2[2], state + 1)
 	end
 end
+Base.length(F::Fibonnanci_mod_k) = F.n
 
 #=
-	mutable - can change the fields
-	struct - its a class
-	T <: Integer - takes any type T that is a subtype of Integer
+	See documentation for Fibonnaci
 =#
 mutable struct Tribonnaci{T<:Integer}
-	# The last three values stored as a tuple of type T
 	last3::Tuple{T, T, T}
-	# nth term in sequence
 	n::Int
 end
-# explicitly listing out the different ways that the constructor
-# handles different types of args.
+
 tribonnaci(n::Integer) = Tribonnaci((1,1,1), n)
-# This allows us to use BigInts instead of Ints.
-# Called like fibonnaci(10^14, BigInt)
 tribonnaci(n::Integer, T::Type) = Tribonnaci{T}((1,1,1), n)
 
-# State default set to 1. Theres a reason why i just dunno how to explain.
 function Base.iterate(T::Tribonnaci, state=1)
 	if state == 1 || state == 2 || state == 3
-		# If at the initial condition, return 1 (the first)
-		# Fibonnaci value as well as 2 for state
 		(1, state + 1)
-	# check end condition, if there will be one.
+
 	elseif state > T.n
 		nothing
+
 	else
-		# Set the last2 values to be the new last two values
 		T.last3 = T.last3[2], T.last3[3], sum(T.last3)
-		# "yield" the new value and the new state
-		(T.last3[3], state + 1)
+		return T.last3[3], state + 1
 	end
 end
+Base.length(T::Tribonnaci) = T.n
 
-#=
-	mutable - can change the fields
-	struct - its a class
-	T <: Integer - takes any type T that is a subtype of Integer
-=#
 mutable struct Tribonnaci_mod_k{T<:Integer}
-	# The last three values stored as a tuple of type T
 	last3::Tuple{T, T, T}
-	# nth term in sequence
 	n::Int
 	k::Int
 end
-# explicitly listing out the different ways that the constructor
-# handles different types of args.
+
 tribonnaci_mod_k(n::Integer, k::Integer) = Tribonnaci_mod_k((1,1,1), n, k)
-# This allows us to use BigInts instead of Ints.
-# Called like fibonnaci(10^14, BigInt)
 tribonnaci_mod_k(n::Integer, k::Integer, T::Type) = Tribonnaci_mod_k{T}((1,1,1), n, k)
-Base.length(T::Tribonnaci_mod_k) = T.n
 
 # State default set to 1. Theres a reason why i just dunno how to explain.
 function Base.iterate(T::Tribonnaci_mod_k, state=1)
 	if state == 1 || state == 2 || state == 3
 		# If at the initial condition, return 1 (the first)
 		# Fibonnaci value as well as 2 for state
-		(1, state + 1)
-	# check end condition, if there will be one.
+		return 1, state + 1
+
 	elseif state > T.n
-		nothing
+		return nothing
+
 	else
-		# Set the last2 values to be the new last two values
 		T.last3 = T.last3[2], T.last3[3], sum(T.last3) % T.k
-		# "yield" the new value and the new state
-		(T.last3[3], state + 1)
+		return T.last3[3], state + 1
 	end
 end
+Base.length(T::Tribonnaci_mod_k) = T.n
 
+# TODO this could probably just be replaced by collect lol
+# TODO 90% sure theres a better way to generate fib seq somewhere
 function fibonnaci_sequence(n::Integer, T::Type=Int)
 	#=
 	Returns first n terms of the fibonnaci sequence
