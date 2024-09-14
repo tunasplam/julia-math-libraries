@@ -323,5 +323,11 @@ end
     @test collect(iterate_combinations(2)) == [
         "01", "10", "11", "00"
     ]
+end
 
+@testset "Misc.jl" begin
+    @test digits_to_number([1,2,3]) == 123
+    @test digits_to_number([1,2]) == 12
+    @test digits_to_number([1,2,0,3]) == 1203
+    @test digits_to_number([0,1,2,3]) == 123
 end

@@ -40,7 +40,7 @@ module JuliaMathLibraries
     export is_palindrome, palindromic_products_of_numbers_with_n_digits
     include("PalindromicNumbers.jl")
 
-    export reverse_digits
+    export reverse_digits, digits_to_number
     include("Misc.jl")
 
     export subsequences
