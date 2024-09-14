@@ -312,3 +312,16 @@ end
     @test minimum(palindromic_products_of_numbers_with_n_digits(2)) == 121
     @test length(palindromic_products_of_numbers_with_n_digits(2)) == 73
 end
+
+@testset "Combinatorics.jl" begin
+    @test collect(iterate_combinations(3)) == [
+        "001", "010", "011",
+        "100", "101", "110", 
+        "111", "000"
+    ]
+
+    @test collect(iterate_combinations(2)) == [
+        "01", "10", "11", "00"
+    ]
+
+end
