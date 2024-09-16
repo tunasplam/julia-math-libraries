@@ -80,7 +80,7 @@ function num_partitions_n_into_prime_parts_list(N::Int)::Vector{Int}
 
     for n in 1:N
         # tried to mirror it as closely to the mathworld formula as possible
-        B[n] = (c(n) + sum([c(k)*B[n-k] for k in 1:n-1])) ÷ n
+        @fastmath @inbounds B[n] = (c(n) + sum([c(k)*B[n-k] for k in 1:n-1])) ÷ n
     end
     return B
 end

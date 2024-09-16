@@ -37,7 +37,7 @@ see p153.jl for implementation
 
 =#
 
-function divisors(n::Int)::Vector{Int}
+function divisors(n::Integer)::Vector{Integer}
 	divs = [1]
 
 	if n == 1
@@ -63,7 +63,7 @@ function divisors(n::Int)::Vector{Int}
 	return divs
 end
 
-function proper_divisors(n::Int)::Vector{Int}
+function proper_divisors(n::Integer)::Vector{Integer}
 
 	if n == 1
 		return []
@@ -88,7 +88,7 @@ function proper_divisors(n::Int)::Vector{Int}
 	return divs
 end
 
-function num_positive_divisors(num::Int)::Int
+function num_positive_divisors(num::Integer)::Integer
 	#=
 	FORMERLY CALLED generate_sigma and generate_sigma_zero
 	Counts the number of positive divisiors of num.
@@ -111,7 +111,7 @@ function num_positive_divisors(num::Int)::Int
 	return tau
 end
 
-function divisor_sum(n::Int)::Int
+function divisor_sum(n::Integer)::Integer
 	#=
 	Returns the sum of the divisors of the input
 
@@ -119,13 +119,13 @@ function divisor_sum(n::Int)::Int
 	See equation 14 in the above link.
 	=#
 	total = 1
-	for factor in prime_factorization(n)
-		@inbounds @fastmath total *= (factor[1]^(factor[2] + 1) - 1)÷(factor[1] - 1)
+	for (p, k) in prime_factorization(n)
+		@inbounds @fastmath total *= (p^(k + 1) - 1)÷(p - 1)
 	end
 	return total
 end
 
-function sigma_one_list(n::Int)::Vector{Int}
+function sigma_one_list(n::Integer)::Vector{Integer}
 	#=
 	Gives us the SUM of the divisors for each of the first n integers.
 
@@ -137,14 +137,20 @@ function sigma_one_list(n::Int)::Vector{Int}
 	return map(divisor_sum, 1:n)
 end
 
-function sigma_two(n::Int)::Int
+function σ_2(n::Integer)::Integer
 	#=
 	Determine the sum of the squares of the divisors of an integer.
+
+	https://oeis.org/A001157
 	=#
-	return reduce(+, map(x -> x^2, divisors(n)))
+	total = 1
+	for (p, k) in prime_factorization(n)
+		@inbounds @fastmath total *= (p^(2k + 2) - 1)÷(p^2 - 1)
+	end
+    return total
 end
 
-function sum_sigma_one_list(x::Int)::Int
+function sum_sigma_one_list(x::Integer)::Integer
 	#=
 		Sum of the # of divisors of n for n ≤ x
 

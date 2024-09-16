@@ -34,3 +34,56 @@ function digits_to_number(d; base=10)
     end
     return s
 end
+
+# TODO when this is done move into Misc.jl so that one day it can be evolved
+# into something that applies a function to the first d digits after the decimal place of a
+# bigfloat
+function sum_first_100_digits(n::Integer)::Integer
+    setprecision(1024)
+
+    if n == 1
+        return 1
+    end
+
+    if sqrt(n) == floor(sqrt(n))
+        return sum(digits(floor(Int, sqrt(n))))
+    end
+
+    floor_sqrt = floor(Int, sqrt(n))
+    prev_term = BigFloat(1)
+    # TODO OR REPLACE Sqrt FUNCTION HERE WITH SOMETHING THAT APPROXIMATES THE BIGFLOAT
+    # YOU WANT TO OPERATE ON THE DECIMAL DIGITS OF.
+    for s in sqrt_n_newtons_iteration(n)
+
+        # chop off the integer digits. this pads the BigFloat with 0. on the left.
+        s -= floor_sqrt
+        #@show n, s, floor_sqrt
+
+        # if there isnt 100 digits yet then move along
+        if length(string(prev_term)) < 100
+            prev_term = s
+            continue
+        end
+
+        #@show i, s, prev_term
+        
+        # see if the previous term and the current term agree to 100 digits
+        # going from 3 -> 101 bc first two chars are leading '0.'
+        if string(prev_term)[3:160] == string(s)[3:160]
+            # convert the first 100 digits to an array of integers and sum
+            # but you also need to 
+            # ... sorry about this.
+            return sum(
+                map(
+                    x -> parse(Int, x),
+                    split(
+                        string(s)[3:101],
+                        ""
+                    )
+                )
+            )+ floor_sqrt
+        end
+
+        prev_term = s
+    end
+end

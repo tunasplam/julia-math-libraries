@@ -211,16 +211,16 @@ end
     @test sum_sigma_one_list(9)  == sum(num_positive_divisors(x) for x in 1:9)
     @test sum_sigma_one_list(10) == sum(num_positive_divisors(x) for x in 1:10)
 
-    @test sigma_two(1)  == 1
-    @test sigma_two(2)  == 5
-    @test sigma_two(3)  == 10
-    @test sigma_two(4)  == 21
-    @test sigma_two(5)  == 26
-    @test sigma_two(6)  == 50
-    @test sigma_two(7)  == 50
-    @test sigma_two(8)  == 85
-    @test sigma_two(9)  == 91
-    @test sigma_two(10) == 130
+    @test σ_2(1)  == 1
+    @test σ_2(2)  == 5
+    @test σ_2(3)  == 10
+    @test σ_2(4)  == 21
+    @test σ_2(5)  == 26
+    @test σ_2(6)  == 50
+    @test σ_2(7)  == 50
+    @test σ_2(8)  == 85
+    @test σ_2(9)  == 91
+    @test σ_2(10) == 130
 
     @test num_positive_divisors_list(1)  == map(num_positive_divisors, 1:1)
     @test num_positive_divisors_list(2)  == map(num_positive_divisors, 1:2)

@@ -2,7 +2,7 @@ module JuliaMathLibraries
 
     greet() = return "Hello"
 
-    export square_root_digits
+    export square_root_digits, sqrt_n_newtons_iteration
     include("SquareRoots.jl")
 
     export terminates
@@ -18,7 +18,7 @@ module JuliaMathLibraries
     include("Primes.jl")
 
     export num_positive_divisors, sigma_one_list, divisor_sum,
-    sigma_two, sum_sigma_one_list, num_positive_divisors_list,
+    σ_2, sum_sigma_one_list, num_positive_divisors_list,
     min_num_divisible_by_primes_leq_k, divisors, proper_divisors
     include("Divisors.jl")
 
