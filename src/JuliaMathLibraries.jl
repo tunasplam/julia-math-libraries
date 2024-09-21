@@ -54,4 +54,7 @@ module JuliaMathLibraries
 
     export iterate_combinations
     include("Combinatorics.jl")
+
+    export integration_trapezoid
+    include("Integration.jl")
 end

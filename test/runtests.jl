@@ -12,6 +12,16 @@ end
 #     @test J.square_root_digits(3,11) == 1.73205080756
 # end
 
+# Integration
+@testset "Integration.jl" begin
+    f(x) = x^2
+    @test round(integration_trapezoid(f, 0, 2), digits=4) == 2.6667
+    f(x) = sin(x)
+    @test round(integration_trapezoid(f, -2, 5), digits=5) == -0.69981
+    f(x) = abs(x)
+    @test round(integration_trapezoid(f, -10, 10), digits=1) == 100
+end
+
 # Partitions
 @testset "Partitions.jl" begin
     P = J.partition_function_p_list(100)
