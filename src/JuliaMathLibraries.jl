@@ -58,6 +58,6 @@ module JuliaMathLibraries
     export integration_trapezoid
     include("Integration.jl")
 
-    export newtons_root_finder
+    export newtons_method_recursive
     include("NewtonsMethod.jl")
 end

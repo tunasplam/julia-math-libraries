@@ -1,23 +1,30 @@
 #=
-    An iterator that you can iterate over to estimate roots of equations
-
-    https://en.wikipedia.org/wiki/Newton%27s_method
-
-    When you use, use `setprecision(512)` to make sure your BigFloats
-    have 158 digits. Increase to get more digits.
+Iterates Newton's method n times to estimate the root of
+a function f using initial guess x_o. Must provide f'.
 =#
-mutable struct Newton_root_finder
+function newtons_method_recursive(
     f::Function,
     f_prime::Function,
-    # we need the previous term to calculate the next
-    prev_term::Real
+    x_o::Real,
+    n::Integer
+)::Real
+    if n < 1
+        raise(DomainError)
+    end
+    return _newtons_method_step(f, f_prime, x_o, 1, n)
 end
 
-function newtons_root_finder(f::Function, f_prime::Function, x_o::Real)
-    return Newton_root_finder(f, f_prime, x_o)
-end
-
-function Base.iterate(R::Newton_root_finder, index=1)
-    R.prev_term = R.prev_term + f(R.prev_term)/f_prime(R.prev_term)
-    return R.prev_term, index + 1
+function _newtons_method_step(
+    f::Function,
+    f_prime::Function,
+    prev_term::Real,
+    k::Integer,
+    n::Integer
+)::Real
+    next_term = prev_term - f(prev_term)/f_prime(prev_term)
+    if n == k
+        return next_term
+    else
+        return _newtons_method_step(f, f_prime, next_term, k+1, n)
+    end
 end

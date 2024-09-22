@@ -7,7 +7,15 @@ const J = JuliaMathLibraries
 end
 
 @testset "NewtonsMethod.jl" begin
-    
+    f(x) = x^2
+    f_prime(x) = 2x
+    @assert round(newtons_method_recursive(f, f_prime, 1, 25)) == 0
+    f(x) = 4x^4 - 2x^2 + x - 7
+    f_prime(x) = 16x^3 - 4x + 1
+    @assert round(newtons_method_recursive(f, f_prime, -2, 25), digits=4) == -1.3087
+    f(x) = tan(x)
+    f_prime(x) = sec(x)^2
+    @assert round(newtons_method_recursive(f, f_prime, 4, 25), digits=4) == round(π, digits=4)
 end
 
 # Integration

@@ -141,6 +141,10 @@ function σ_2(n::Integer)::Integer
 	#=
 	Determine the sum of the squares of the divisors of an integer.
 
+	TODO look at aniervs answer in:
+	https://codeforces.net/blog/entry/95443
+	That is a stupidly fast algorithm.
+
 	https://oeis.org/A001157
 	=#
 	total = 1
