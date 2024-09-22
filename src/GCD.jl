@@ -1,15 +1,15 @@
-# euclidean algorithm to find gcd of two numbers
+#=
+	Anything related to finding the GCD of two numbers goes here.
+=#
 
-using Printf
-
-function bezout_coefficients(a::Int, b::Int, solution::Int=1)::Tuple{Int,Int}
+function bezout_coefficients(a::Integer, b::Integer, gcd_a_b_case::Bool=true)::Tuple{Int,Int}
 #=
 	https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm
 	For more on algorithm see gcd_extended_euclidean()
 
 	Note that we generate t_i and s_i (Bezout Coefficients).
 	These are useful for solving the equations
-		ax + by = 0 (for all values a and b (I THINK))
+		ax + by = 0 (for all values a and b)
 	AND
 		ax + by = gcd(a,b)
 	And therefore (for gcd(a,b) = 1)
@@ -18,21 +18,17 @@ function bezout_coefficients(a::Int, b::Int, solution::Int=1)::Tuple{Int,Int}
 	and s_{i-1} t_{i-1} for the =gcd(a,b) equation.
 
 	These values can be used to find the modular inverse quickly!
-	
-	solution = 1 means we default to returning the solutions to the
+
+	gcd_a_b_case as TRUE means we default to returning the solutions to the
 	gcd(a, b) equation.
 	(s_{i-1}, t_{i-1})
-	solution = 0 means we return the solutions to the =0 equation
+	gcd_a_b_case as FALSE means we return the solutions to the =0 equation
 	(s_i, t_i)
 	=#
 	if b > a
 		temp = b
 		b = a
 		a = temp
-	end
-	if solution != 0 && solution != 1
-		println("Read the docs on the the solution paramater for bezout_coefficients in gcd.jl")
-		throw(ErrorException("Invalid value for solution type for bezout_coefficients."))
 	end
 
 	r_i_minus_one = a; r_i = b
@@ -45,13 +41,9 @@ function bezout_coefficients(a::Int, b::Int, solution::Int=1)::Tuple{Int,Int}
 	# That is the gcd.
 	while r_i > 0
 		q_i = r_i_minus_one ÷ r_i
-		#@printf "q_i: %d / %d = %d\n" r_i_minus_one r_i q_i
 		new_r_i = r_i_minus_one - q_i*r_i
-		#@printf "r_{i+1}: %d - %d * %d = %d\n" r_i_minus_one q_i r_i new_r_i
 		new_s_i = s_i_minus_one - q_i * s_i
-		#@printf "s_{i+1}: %d - %d * %d = %d\n" s_i_minus_one q_i r_i new_s_i
 		new_t_i = t_i_minus_one - q_i * t_i
-		#@printf "t_{i+1}: %d - %d * %d = %d\n" t_i_minus_one q_i r_i new_t_i
 
 		r_i_minus_one = r_i
 		r_i = new_r_i
@@ -61,9 +53,9 @@ function bezout_coefficients(a::Int, b::Int, solution::Int=1)::Tuple{Int,Int}
 		s_i = new_s_i
 
 	end
-	if solution == 1
+	if gcd_a_b_case
 		return (s_i_minus_one, t_i_minus_one)
-	elseif solution == 0
+	else
 		return (s_i, t_i)
 	end
 end

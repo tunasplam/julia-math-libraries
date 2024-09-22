@@ -255,29 +255,6 @@ function CRT(system)
 	return result % N * gcd_of_moduli
 end
 
-function modular_inverse(a, n)
-	#=
-	Finds the modular inverse using the bezout coefficients which are found
-	using the extended euclidean algorithm (see bezout_coefficients in gcd.jl)
-	bezout coefficients here referred to as s and t.
-	so...
-	ns + at = 1 is what we are interested in solving.
-	Since we are working mod n, taking mod n of everything takes out the ns term
-	Yields,
-	at = 1 (mod n) [it drops since it is a multiple of n]
-	Thus, t % n is the modular inverse of a mod n
-	=#
-	# Can crash is b > a or the third arg is wrong (will always be 1
-	# here since we want to solve ns + at = 1)
-	res = bezout_coefficients(n, a, 1)
-	println(res)
-	ans = res[2] % n 
-	# TODO NEGATIVE RESULT? THIS IS A BANDAGE> DUNOO IF IT ALWAYS WORKS.
-	if ans < 0
-		return n + ans
-	end
-	return ans
-end
 
 function modular_inverse_brute_force(a, n)
 	#=

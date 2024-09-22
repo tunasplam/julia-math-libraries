@@ -7,25 +7,25 @@ const J = JuliaMathLibraries
 end
 
 @testset "NewtonsMethod.jl" begin
-    f(x) = x^2
-    f_prime(x) = 2x
-    @assert round(newtons_method_recursive(f, f_prime, 1, 25)) == 0
-    f(x) = 4x^4 - 2x^2 + x - 7
-    f_prime(x) = 16x^3 - 4x + 1
-    @assert round(newtons_method_recursive(f, f_prime, -2, 25), digits=4) == -1.3087
-    f(x) = tan(x)
-    f_prime(x) = sec(x)^2
-    @assert round(newtons_method_recursive(f, f_prime, 4, 25), digits=4) == round(π, digits=4)
+    g(x) = x^2
+    g_prime(x) = 2x
+    @assert round(newtons_method_recursive(g, g_prime, 1, 25)) == 0
+    h(x) = 4x^4 - 2x^2 + x - 7
+    h_prime(x) = 16x^3 - 4x + 1
+    @assert round(newtons_method_recursive(h, h_prime, -2, 25), digits=4) == -1.3087
+    l(x) = tan(x)
+    l_prime(x) = sec(x)^2
+    @assert round(newtons_method_recursive(l, l_prime, 4, 25), digits=4) == round(π, digits=4)
 end
 
 # Integration
 @testset "Integration.jl" begin
-    f(x) = x^2
-    @test round(integration_trapezoid(f, 0, 2), digits=4) == 2.6667
-    f(x) = sin(x)
-    @test round(integration_trapezoid(f, -2, 5), digits=5) == -0.69981
-    f(x) = abs(x)
-    @test round(integration_trapezoid(f, -10, 10), digits=1) == 100
+    g(x) = x^2
+    @test round(integration_trapezoid(g, 0, 2), digits=4) == 2.6667
+    h(x) = sin(x)
+    @test round(integration_trapezoid(h, -2, 5), digits=5) == -0.69981
+    l(x) = abs(x)
+    @test round(integration_trapezoid(l, -10, 10), digits=1) == 100
 end
 
 # Partitions
@@ -329,6 +329,27 @@ end
     @test length(palindromic_products_of_numbers_with_n_digits(2)) == 73
 end
 
+@testset "LinearCongruences.jl" begin
+    @test modular_inverse(3, 11) == 4
+    @test modular_inverse(10, 17) == 12
+    @test modular_inverse(7, 26) == 15
+    @test modular_inverse(14, 15) == 14
+    @test modular_inverse(9, 28) == 25
+    @test modular_inverse(2, 5) == 3
+    @test modular_inverse(8, 19) == 12
+    @test modular_inverse(23, 100) == 87
+    @test modular_inverse(29, 101) == 7
+
+    @test array_modular_inverse([3, 10, 7], 11) == [4, 10, 8]
+    @test array_modular_inverse([14, 9, 2], 17) == [11, 2, 9]
+    @test array_modular_inverse([8, 23, 29], 19) == [12, 5, 2]
+    @test array_modular_inverse([1, 5, 12], 13) == [1, 8, 12]
+    @test array_modular_inverse([4, 9, 16], 25) == [19, 14, 11]
+    @test array_modular_inverse([17, 25, 31], 37) == [24, 3, 6]
+    @test array_modular_inverse([10, 22, 34], 29) == [3, 4, 6]
+    @test array_modular_inverse([12, 18, 24], 29) == [17, 21, 23]
+end
+
 @testset "Combinatorics.jl" begin
     @test collect(iterate_combinations(3)) == [
         "001", "010", "011",
@@ -339,6 +360,17 @@ end
     @test collect(iterate_combinations(2)) == [
         "01", "10", "11", "00"
     ]
+
+    @test C(5, 2) == 10
+    @test C(6, 3) == 20
+    @test C(10, 5) == 252
+    @test C(8, 0) == 1
+    @test C(8, 8) == 1
+    @test C(15, 1) == 15
+    @test C(20, 10) == 184756
+    @test C(7, 4) == 35
+    @test C(30, 15) == 155117520
+    @test C(50, 25) == 126410606437752
 end
 
 @testset "Misc.jl" begin

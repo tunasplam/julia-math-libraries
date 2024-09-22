@@ -52,7 +52,7 @@ module JuliaMathLibraries
     export partition_function_p_list, num_partitions_n_into_prime_parts_list
     include("Partitions.jl")
 
-    export iterate_combinations
+    export iterate_combinations, C, C_mod_prime_p
     include("Combinatorics.jl")
 
     export integration_trapezoid
@@ -60,4 +60,7 @@ module JuliaMathLibraries
 
     export newtons_method_recursive
     include("NewtonsMethod.jl")
+
+    export modular_inverse, array_modular_inverse
+    include("LinearCongruences.jl")
 end
