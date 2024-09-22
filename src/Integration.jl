@@ -2,7 +2,7 @@
 Good ole' integration
 =#
 
-function integration_trapezoid(f, a::Real, b::Real, n::Integer=1000)::Real
+function integration_trapezoid(f::Function, a::Real, b::Real, n::Integer=1000)::Real
     #=
     Integrates a function f on an interval from a to b using n
     trapezoids. Assuming every partition is evenly spaced.

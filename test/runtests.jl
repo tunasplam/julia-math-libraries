@@ -6,11 +6,9 @@ const J = JuliaMathLibraries
     @test J.greet()== "Hello"
 end
 
-# square roots
-# @testset "SquareRoots.jl" begin
-#     @test J.square_root_digits(2,11) == 1.41421356237
-#     @test J.square_root_digits(3,11) == 1.73205080756
-# end
+@testset "NewtonsMethod.jl" begin
+    
+end
 
 # Integration
 @testset "Integration.jl" begin
