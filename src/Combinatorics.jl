@@ -19,7 +19,6 @@ function C(n::Integer, k::Integer)::Integer
     return round(Int, res)
 end
 
-
 function C_mod_m(n::Integer, k::Integer, m::Integer)::Integer
     #=
         Calculate nCr % m.
@@ -37,19 +36,67 @@ function C_mod_prime_p(n::Integer, k::Integer, p::Integer)::Integer
         Calculate nCr % p where p is prime.
         https://cp-algorithms.com/combinatorics/binomial-coefficients.html#binomial-coefficient-modulo-large-prime
     
+        To derive this formula, simply take the definition of nCr and
+        mod both sides. Then rewrite the fraction using modular inverses.
+
         NOTE if you are going to use this multiple times then you want to cache the
         values of factorial_mod_m up to the maximum input value n.
         
         So you should implement this function custom everytime you use it. Refer
         to an array `factorial` that is primed at the beginning with:
 
-        factorial[1] = 1
-        for i in 1:max_n
-            factorial[i] = factorial[i-1] * i % p
+        ```
+        factorial_mod_p = ones(Int, max_n)
+        for i in 2:max_n
+            factorial_mod_p[i] = factorial_mod_p[i-1] * i % p
         end
+        ```
+
+        NOTE above is O(max_n). Combining with the code in this functino
+        and no other caching gies O(log p) time
 
         NOTE if you need factorial[0] then use those cool offset arrays.
+    
+        NOTE computation of binomial coefficient can be down to O(1)
+        if you precompute values of inverses of factorials.
+        To do so (using cache factorial_mod_p above):
+
+        ```
+        inverse_factorial = ones(Int, max_n)
+        inverse_factorial_mod_p[1] = modular_inverse(factorial_mod_p[1], p)
+        for i in 2:max_n
+            inverse_factorial[i] = modular_inverse(factorial_mod_p[i], p)
+        end
+        ```
+
+        NOTE here is the above two cleaned up significantly. See p788
+        to see this in action.
+
+        ```
+        factorial_mod_p = ones(Int, N)
+        inverse_factorial_mod_p = ones(Int, N)
+        inverse_factorial_mod_p[1] = modular_inverse(factorial_mod_p[1], p)
+        for i in 2:N
+            factorial_mod_p[i] = factorial_mod_p[i-1] * i % p
+            inverse_factorial_mod_p[i] = modular_inverse(factorial_mod_p[i], p)
+        end
+        ```
     =#
+
+    # NOTE you can get a performance boost if you can guarantee k > 0
+    # just comment this out.
+    if k < 0
+        return 0
+    end
+
+    # NOTE you can disable this if you can guarantee that p is prime
+    # to get a speedup.
+    @assert is_prime(p)
+
+    # here is an implementation without any caching.
+    # NOTE do not combine the modular inverses here with multiplication
+    # since we want them to be cached using the individual factorials.
+    return factorial_mod(n, p) * modular_inverse(factorial_mod(k, p), p) * modular_inverse(factorial_mod(n-k, p), p) % p
 end
 
 function C_mod_prime_power_p(n::Integer, k::Integer, p::Integer)::Integer
@@ -73,7 +120,7 @@ mutable struct Iterate_Combinations
         ..00010
         ..00101
         ...
-    
+
         The idea is to iterate through 1:2^n and return
         each binary representation as a string.
 

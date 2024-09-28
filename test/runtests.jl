@@ -371,6 +371,22 @@ end
     @test C(7, 4) == 35
     @test C(30, 15) == 155117520
     @test C(50, 25) == 126410606437752
+
+    @test C_mod_prime_p(5, 2, 7) == 3
+    @test C_mod_prime_p(6, 3, 17) == 3
+    @test C_mod_prime_p(10, 5, 19) == 5
+    @test C_mod_prime_p(8, 0, 17) == 1
+    @test C_mod_prime_p(8, 8, 17) == 1
+    @test C_mod_prime_p(15, 1, 17) == 15
+    @test C_mod_prime_p(20, 10, 173) == 165
+    @test C_mod_prime_p(7, 4, 23) == 12
+    @test C_mod_prime_p(30, 15, 17) == 0
+    @test C_mod_prime_p(50, 25, 1009) == 589
+    # C(0, 0) = 1
+    @test C_mod_prime_p(0, 0, 1733) == 1
+    # C(n, k) = 0 for k < 0
+    @test C_mod_prime_p(0, -3, 1733) == 0
+
 end
 
 @testset "Misc.jl" begin
