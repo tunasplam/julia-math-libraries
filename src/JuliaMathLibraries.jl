@@ -63,4 +63,7 @@ module JuliaMathLibraries
 
     export modular_inverse, array_modular_inverse
     include("LinearCongruences.jl")
+
+    export langtons_ant
+    include("LangtonsAnt.jl")
 end
