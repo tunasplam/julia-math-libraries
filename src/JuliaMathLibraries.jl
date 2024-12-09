@@ -70,8 +70,8 @@ module JuliaMathLibraries
     export hypergeometric, poisson, negative_binomial, binomial_pdf, geometric
     include("PDFs.jl")
 
-    export cf_to_rational, visualize_cf, rational_to_cf
-    include("Continued_Fractions.jl")
+    export ContinuedFraction, visualize
+    include("ContinuedFraction.jl")
 
     export reciprocal
     include("Rational.jl")

@@ -396,9 +396,15 @@ end
     @test digits_to_number([0,1,2,3]) == 123
 end
 
+#=
+    Continued Fractions Tests below
+=#
+
 @testset "Continued_Fractions.jl" begin
+
     # ChatGPT made this... pretty cool. There were three mistakes, however.
 
+    #=
     # Basic cases
     @test cf_to_rational([1]) == 1//1
     @test cf_to_rational([2]) == 2//1
@@ -419,26 +425,30 @@ end
     
     # Approximation cases
     @test cf_to_rational([1, 1, 1, 1, 1]) == 8//5  # A longer fraction approximation
+    =#
 
-    @test visualize_cf([1,2,3]) == "1 + 1/(2 + 1/(3))"
-    @test visualize_cf([1,2,3,4]) == "1 + 1/(2 + 1/(3 + 1/(4)))"
+    @test visualize([1,2,3]) == "1 + 1/(2 + 1/(3))"
+    @test visualize([1,2,3,4]) == "1 + 1/(2 + 1/(3 + 1/(4)))"
 
-    @test rational_to_cf(1//2) == [0, 2]
-    @test rational_to_cf(3//4) == [0, 1, 3]
-    @test rational_to_cf(7//3) == [2, 3]
-    @test rational_to_cf(10//7) == [1, 2, 3]
+    @test ContinuedFraction(1//2) == ContinuedFraction([0, 2])
+    @test ContinuedFraction(3//4) == ContinuedFraction([0, 1, 3])
+    @test ContinuedFraction(7//3) == ContinuedFraction([2, 3])
+    @test ContinuedFraction(10//7) == ContinuedFraction([1, 2, 3])
 
     # Test negative fractions
-    @test rational_to_cf(-1//2) == [0, -2]
-    @test rational_to_cf(-7//3) == [-2, -3]
+    @test ContinuedFraction(-1//2) == ContinuedFraction([0, -2])
+    @test ContinuedFraction(-7//3) == ContinuedFraction([-2, -3])
 
     # Test edge cases
-    @test rational_to_cf(0//1) == [0]  # Zero case
-    @test rational_to_cf(1//1) == [1]  # Unity
-    @test rational_to_cf(-1//1) == [-1]
+    @test ContinuedFraction(0//1) == ContinuedFraction([0])  # Zero case
+    @test ContinuedFraction(1//1) == ContinuedFraction([1])  # Unity
+    @test ContinuedFraction(-1//1) == ContinuedFraction([-1])
 
     # Test large numbers
-    @test rational_to_cf(355//113) == [3, 7, 16]  # π approximation
-    @test rational_to_cf(22//7) == [3, 7]  # Another π approximation
+    @test ContinuedFraction(355//113) == ContinuedFraction([3, 7, 16])  # π approximation
+    @test ContinuedFraction(22//7) == ContinuedFraction([3, 7])  # Another π approximation
+
+    # TODO constructors for Continued_Fractions
+    # orbit of [0] throws exception
 
 end
