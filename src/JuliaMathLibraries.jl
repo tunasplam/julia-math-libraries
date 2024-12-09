@@ -5,9 +5,6 @@ module JuliaMathLibraries
     export square_root_digits, sqrt_n_newtons_iteration
     include("SquareRoots.jl")
 
-    export terminates
-    include("Fractions.jl")
-
     export gcd
     include("GCD.jl")
 
@@ -73,7 +70,7 @@ module JuliaMathLibraries
     export ContinuedFraction, visualize
     include("ContinuedFraction.jl")
 
-    export reciprocal
+    export reciprocal, terminates, Rational
     include("Rational.jl")
 
 end

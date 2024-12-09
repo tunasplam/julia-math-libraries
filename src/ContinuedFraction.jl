@@ -22,6 +22,7 @@
 
     TODO this needs to be its own package.
     TODO this needs to be prominently displayed.
+    TODO professional looking juliadoc
 =#
 
 #=
@@ -53,34 +54,10 @@ struct ContinuedFraction{T<:Vector{Int}} <: Real
     ContinuedFraction(head::Vector{Int}) = ContinuedFraction(head, Vector{Int}())
 end
 
+Base.:(==)(cf1::ContinuedFraction, cf2::ContinuedFraction) =
+ cf1.head == cf2.head && cf1.orbit == cf2.orbit
 
-
-# # this constructor below ensures that invalid orbits are not passed along
-# @noinline __throw_continuedfraction_argerror(T) = throw(
-#     ArgumentError(LazyString("invalid continued fraction: cannot have orbit of [0]"))
-# )
-# # Vector{Int}() is how to instantiate an empty vector [] of type Vector{Int}
-# # and not Vector{Any}
-# function ContinuedFraction{T}(head::T, orbit::T=Vector{Int}()) where T<:Vector{Int}
-#     # trailing value of orbit cannot be 0
-#     orbit[end] == 0 && 
-# end
-
-#ContinuedFraction(head::T) where T:Vector{Int} = ContinuedFraction{T}(head)
-
-# uh, cuz why not. Of course we might want to write these values to disk.
-function read(s::IO)
-    head = read(s)
-    orbit = read(s)
-    ContinuedFraction(head, orbit)
-end
-
-function write(s::IO, cf::ContinuedFraction)
-    write(s, head(cf), orbit(cf))
-end
-
-# these are what convert it between other Julia base types
-function parse(q::Rational)::ContinuedFraction
+function ContinuedFraction(q::Rational)
     #=
         This is the function that i wrote down on that bus ride going
         over the grapevine to disneyland. My first year teaching, on a
@@ -108,13 +85,25 @@ function parse(q::Rational)::ContinuedFraction
                 return cf
             ```
     =#
-    head = []
+    h = Vector{Int}()
     a, b = numerator(q), denominator(q)
     while b != 0
-        append!(head, a ÷ b)
+        append!(h, a ÷ b)
         a, b = b, a % b
     end
-    return ContinuedFraction(head)
+    return ContinuedFraction(h)
+end
+
+
+# uh, cuz why not. Of course we might want to write these values to disk.
+function read(s::IO)
+    head = read(s)
+    orbit = read(s)
+    ContinuedFraction(head, orbit)
+end
+
+function write(s::IO, cf::ContinuedFraction)
+    write(s, head(cf), orbit(cf))
 end
 
 function visualize(cf::Vector{Int})::String
@@ -123,31 +112,9 @@ function visualize(cf::Vector{Int})::String
     return join(cf, " + 1/(") * ")" ^ (length(cf) - 1)
 end
 
-function cf_to_rational(cf::Vector{Int})::Rational
-	#=
-	Same as irrational but we don't have to worry about the formatting.
-	This should always spit out a nice solution.
-	Returns num // den AS A FRACTION (Rational)
-
-	Note that the first value of cf is the whole part.
-	=#
-
-    @assert length(cf) > 0
-
-    num = 1; den = cf[end]
-	for i in length(cf)-1:-1:1
-		# Keep adding and flipping. If you don't know whats going on
-		# then work it out on paper.
-		num += cf[i]*den
-
-		temp = num
-		num = den
-		den = temp
-	end
-
-	# flipped one too many times so unflip here
-	return den // num
-end
+period(cf::ContinuedFraction)::Int = length(cf.orbit)
+terminates(cf::ContinuedFraction)::Bool = cf.orbit == Vector{Int}()
+Base.length(cf::ContinuedFraction)::Int = Inf ? length(cf.orbit) > 0 : length(cf.head)
 
 function cf_to_float(cf::Vector; whole_part::Int=0)::Float
 	#=

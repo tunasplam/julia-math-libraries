@@ -92,12 +92,15 @@ end
 end
 
 # Fractions
-@testset "Fractions.jl" begin
-    @test J.terminates(1, 5) == true
-    @test J.terminates(2, 3) == false
-    @test J.terminates(1, 7) == false
-    @test J.terminates(10, 100) == true
-    @test J.terminates(5, 7) == false
+@testset "Rational.jl" begin
+    @test terminates(1 // 5) == true
+    @test terminates(2 // 3) == false
+    @test terminates(1 // 7) == false
+    @test terminates(10 // 100) == true
+    @test terminates(5 // 7) == false
+
+    @test reciprocal(1 // 2) == 2 // 1
+    @test reciprocal(-11 // 23) == -23 // 11
 end
 
 # GCD
@@ -404,28 +407,27 @@ end
 
     # ChatGPT made this... pretty cool. There were three mistakes, however.
 
-    #=
     # Basic cases
-    @test cf_to_rational([1]) == 1//1
-    @test cf_to_rational([2]) == 2//1
+    @test Rational(ContinuedFraction([1])) == 1//1
+    @test Rational(ContinuedFraction([2])) == 2//1
 
     # Simple continued fractions
-    @test cf_to_rational([1, 2]) == 3//2  # 1 + 1/2
-    @test cf_to_rational([2, 3]) == 7//3  # 2 + 1/3
+    @test Rational(ContinuedFraction([1, 2])) == 3//2  # 1 + 1/2
+    @test Rational(ContinuedFraction([2, 3])) == 7//3  # 2 + 1/3
 
     # Longer continued fractions
-    @test cf_to_rational([1, 2, 3]) == 10//7 # 1 + 1/(2 + 1/3)
-    @test cf_to_rational([3, 2, 1]) == 10//3  # 3 + 1/(2 + 1/1)
+    @test Rational(ContinuedFraction([1, 2, 3])) == 10//7 # 1 + 1/(2 + 1/3)
+    @test Rational(ContinuedFraction([3, 2, 1])) == 10//3  # 3 + 1/(2 + 1/1)
 
     # Edge cases
-    @test cf_to_rational([0]) == 0//1     # Zero as the only term
+    @test Rational(ContinuedFraction([0])) == 0//1     # Zero as the only term
 
     # Large numbers
-    @test cf_to_rational([1, 1000, 1]) == 1002//1001
+    @test Rational(ContinuedFraction([1, 1000, 1])) == 1002//1001
     
     # Approximation cases
-    @test cf_to_rational([1, 1, 1, 1, 1]) == 8//5  # A longer fraction approximation
-    =#
+    @test Rational(ContinuedFraction([1, 1, 1, 1, 1])) == 8//5  # A longer fraction approximation
+
 
     @test visualize([1,2,3]) == "1 + 1/(2 + 1/(3))"
     @test visualize([1,2,3,4]) == "1 + 1/(2 + 1/(3 + 1/(4)))"
