@@ -1,14 +1,52 @@
 #=
-    Continued fractions are cool. We represent them with vectors as such:
+    Continued fractions are cool. This was a lot of fun.
+    We represent them with vectors as such:
 
-    [1 2 3 4] = 1 + 1/(2+1/3+(1/4))
+    [1 2 3 4] = 1 + 1/(2+1/(3+(1/4)))
 
     a fun visualization function is the first function you can use here for fun.
 =#
 
 function visualize_cf(cf::Vector{Int})::String
     # This is one of the coolest things I have ever discovered.
-    return " + 1/(".join(cf) + ")" * (length(cf) - 1)
+    return join(cf, " + 1/(") * ")" ^ (length(cf) - 1)
+end
+
+function rational_to_cf(r::Rational)::Array{Int}
+    #=
+        This is the function that i wrote down on that bus ride going
+        over the grapevine to disneyland. My first year teaching, on a
+        notepad, while everyone else was watching Dumb and Dumber.
+        Here is the comment that was originally left:
+
+            # Below all converted from python script for continued fractions written
+            # on bus ride to disney land
+
+        This is a lot of fun. Here is the original code:
+
+            ```
+                a, b = num, den
+                cf = []
+                while b != 0
+                    # compute quotient and remainder
+                    a = Int(num÷den)
+                    b = num % den
+                    # Append next part to continued fraction.
+                    append!(cf, a)
+                    # Shift over values for next iteration
+                    num = den
+                    den = b
+                end
+                return cf
+            ```
+    =#
+    cf = []
+    a, b = numerator(r), denominator(r)
+    while b != 0
+        append!(cf, a ÷ b)
+        a, b = b, a % b
+    end
+    return cf
 end
 
 function cf_to_rational(cf::Vector{Int})::Rational
@@ -37,7 +75,7 @@ function cf_to_rational(cf::Vector{Int})::Rational
 	return den // num
 end
 
-function continued_fraction_to_irrational_number(cf; whole_part::Integer=0)
+function cf_to_float(cf::Vector; whole_part::Integer=0)::Float
 	#=
 	Takes a continued fraction representing an irrational
 	number and converts it to an irrational number.
@@ -51,7 +89,7 @@ function continued_fraction_to_irrational_number(cf; whole_part::Integer=0)
 	Once that is collapsed, it will give us
 	x = (a1 + b1x)/(a2 + b2x)
 
-	Which yeilds...
+	Which yields...
 	b2x^2 + (a2 - b1)x - a1 = 0
 
 	That can be solved using quadratic formula.
@@ -59,14 +97,18 @@ function continued_fraction_to_irrational_number(cf; whole_part::Integer=0)
 
 	TODO
 	HAS NOT BEEN TESTED THOROUGHLY.
-
+    TODO i completely borked this
 	=#
+
 	# numerator constant and coefficient of x
-	a1 = 1; b1 = 0
+	a1 = 1
+    b1 = 0
 	# denominator constant and coefficient of x
-	a2 = cf[end]; b2 = 1
+	a2 = cf[end]
+    b2 = 1
 	for i in length(cf)-1:-1:1
-		a1 = cf[i]*a2 + a1; b1 = cf[i]*b2 + b1
+		a1 = cf[i]*a2 + a1
+        b1 = cf[i]*b2 + b1
 		
 		# flip the fraction over by swapping
 		temp = a1
@@ -78,7 +120,9 @@ function continued_fraction_to_irrational_number(cf; whole_part::Integer=0)
 	end
 
 	# set up and solve our quadratic equation.
-	result = quadratic_formula(b2, a2-b1, -a1, formatted=true, sol_type="plus")
+    # TODO this algo seems to require the below function to have a specific
+    # return style... but it does no longer. That is why i added testing :)
+	result = solve_quadratic(b2, a2-b1, -a1, formatted=true, sol_type="plus")
 
 	# Whole part, add it to the result. So result[1] will increase
 	# by whole_part*result[2]

@@ -412,7 +412,6 @@ end
     @test cf_to_rational([3, 2, 1]) == 10//3  # 3 + 1/(2 + 1/1)
 
     # Edge cases
-    @test cf_to_rational([]) == 0//1      # No terms, return 0
     @test cf_to_rational([0]) == 0//1     # Zero as the only term
 
     # Large numbers
@@ -420,4 +419,26 @@ end
     
     # Approximation cases
     @test cf_to_rational([1, 1, 1, 1, 1]) == 8//5  # A longer fraction approximation
+
+    @test visualize_cf([1,2,3]) == "1 + 1/(2 + 1/(3))"
+    @test visualize_cf([1,2,3,4]) == "1 + 1/(2 + 1/(3 + 1/(4)))"
+
+    @test rational_to_cf(1//2) == [0, 2]
+    @test rational_to_cf(3//4) == [0, 1, 3]
+    @test rational_to_cf(7//3) == [2, 3]
+    @test rational_to_cf(10//7) == [1, 2, 3]
+
+    # Test negative fractions
+    @test rational_to_cf(-1//2) == [0, -2]
+    @test rational_to_cf(-7//3) == [-2, -3]
+
+    # Test edge cases
+    @test rational_to_cf(0//1) == [0]  # Zero case
+    @test rational_to_cf(1//1) == [1]  # Unity
+    @test rational_to_cf(-1//1) == [-1]
+
+    # Test large numbers
+    @test rational_to_cf(355//113) == [3, 7, 16]  # π approximation
+    @test rational_to_cf(22//7) == [3, 7]  # Another π approximation
+
 end

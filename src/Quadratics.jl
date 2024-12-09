@@ -2,7 +2,7 @@
 	Everything regarding the basics of quadratic equations
 =#
 
-function quadratic_formula(a::Int, b::Int, c::Int)::Vector{Float64}
+function solve_quadratic(a::Int, b::Int, c::Int)::Vector{Float64}
 	#=
 	Returns a list of the solutions to the quadratic equation defined
 	by a*x^2 + b*x + c = 0
@@ -25,7 +25,7 @@ NOTE the stuff below is cool but havent really messed with it lately and
 its pretty useless
 =#
 
-function pretty_quadratic_formula(a::Int, b::Int, c::Int)::Vector{String}
+function pretty_solve_quadratic(a::Int, b::Int, c::Int)::Vector{String}
 	x = -b
 	y = quadratic_determinate(a, b, c)
 	z = 2a

@@ -5,26 +5,6 @@ include("./sequence.jl")
 include("./algebra.jl")
 using Printf
 
-# Below all converted from python script for continued fractions written
-# on bus ride to disney land
-function convert_to_continued_fraction(num::Integer, den::Integer)
-	# Nice version that plays well with integers.
-	# TODO julia has stuff to handle fractions.
-	a, b = num, den
-	cf = []
-	while b != 0
-		# compute quotient and remainder
-		a = Int(num÷den)
-		b = num % den
-		# Append next part to continued fraction.
-		append!(cf, a)
-		# Shift over values for next iteration
-		num = den
-		den = b
-	end
-	return cf
-end
-
 function convert_to_continued_fraction(num, den)
 	#=
 		Okay... going to have to worry about when we have nasty

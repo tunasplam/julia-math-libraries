@@ -31,7 +31,7 @@ module JuliaMathLibraries
     export add_lattice_alg
     include("Addition.jl")
 
-    export quadratic_formula
+    export solve_quadratic
     include("Quadratics.jl")
 
     export fibonnaci
@@ -70,6 +70,10 @@ module JuliaMathLibraries
     export hypergeometric, poisson, negative_binomial, binomial_pdf, geometric
     include("PDFs.jl")
 
-    export cf_to_rational, visualize_cf
+    export cf_to_rational, visualize_cf, rational_to_cf
     include("Continued_Fractions.jl")
+
+    export reciprocal
+    include("Rational.jl")
+
 end
