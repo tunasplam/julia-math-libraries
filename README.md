@@ -1,8 +1,5 @@
 # julia-math-libraries
 
-# TODO i want beautiful professional looking julia docs
-# that pop up when you hover over a function in VSCode.
-
 Some math libraries that I made for usage while solving Project Euler problems
 https://projecteuler.net/
 
@@ -20,7 +17,7 @@ julia REPL:
 test
 ```
 
-# Build
+# Build / Install Locally
 julia REPL:
 ```
 ] dev .
@@ -38,7 +35,7 @@ const J = JuliaMathLibraries
 @benchmark J.prime_factors_2 setupp=(x=rand(Int, 10^5))
 ```
 
-## Algorithms Covered
+## Algorithms Covered (in no way is this list updated)
 
 ### addition_algorithms.jl
 - Lattice Addition (for large numbers)

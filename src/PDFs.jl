@@ -2,8 +2,6 @@
     Assorted goodies related to probability distributions
 =#
 
-include("./factorial.jl")
-
 function hypergeometric(N::Int, M::Int, n::Int, x::Int)
     #=
         Situation when you want to use this:
@@ -26,7 +24,7 @@ function poisson(λ::Float64, x::Int)
         To use this, first you need to solve for λ in the equation above
         using the probability of the event occuring and the number of trials.
     =#
-    return ((λ^x)/factorial(x))*ℯ^((-1)*λ)
+    return ((λ^x)/factorial_mod(x, 10^6))*ℯ^((-1)*λ)
 end
 
 function negative_binomial(θ::Float64, r::Int, x::Int)

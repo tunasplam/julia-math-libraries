@@ -18,9 +18,7 @@ function subsequences(s)
 
 	input should be a list of strings.
 
-	TODO
 	result should have length n(n+1)/2
-	this might make things more efficient
 	=#
     result = []
 

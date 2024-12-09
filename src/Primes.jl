@@ -16,11 +16,6 @@ using Printf
 	p# = 2(3)(5)(7) ... p if p prime
 	p# = 2(3)(5)(7) ... p_i if p NOT prime where p_i biggest prime s.t. p_i < p
 =#
-# TODO
-# TODO if linear_sieve is faster then switch this over
-# yeah this doesnt work. at all.
-# primorial(n::Int)::Int = reduce(*, primes_leq(n))
-
 
 function primorial_list(n::Int)::Vector{Int}
 	#=

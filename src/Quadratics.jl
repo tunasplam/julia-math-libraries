@@ -21,7 +21,7 @@ function quadratic_determinate(a::Int, b::Int, c::Int)::Int
 end
 
 #=
-TODO the stuff below is cool but havent really messed with it lately and
+NOTE the stuff below is cool but havent really messed with it lately and
 its pretty useless
 =#
 

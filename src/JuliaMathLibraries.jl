@@ -66,4 +66,10 @@ module JuliaMathLibraries
 
     export langtons_ant
     include("LangtonsAnt.jl")
+
+    export hypergeometric, poisson, negative_binomial, binomial_pdf, geometric
+    include("PDFs.jl")
+
+    export cf_to_rational, visualize_cf
+    include("Continued_Fractions.jl")
 end

@@ -395,3 +395,29 @@ end
     @test digits_to_number([1,2,0,3]) == 1203
     @test digits_to_number([0,1,2,3]) == 123
 end
+
+@testset "Continued_Fractions.jl" begin
+    # ChatGPT made this... pretty cool. There were three mistakes, however.
+
+    # Basic cases
+    @test cf_to_rational([1]) == 1//1
+    @test cf_to_rational([2]) == 2//1
+
+    # Simple continued fractions
+    @test cf_to_rational([1, 2]) == 3//2  # 1 + 1/2
+    @test cf_to_rational([2, 3]) == 7//3  # 2 + 1/3
+
+    # Longer continued fractions
+    @test cf_to_rational([1, 2, 3]) == 10//7 # 1 + 1/(2 + 1/3)
+    @test cf_to_rational([3, 2, 1]) == 10//3  # 3 + 1/(2 + 1/1)
+
+    # Edge cases
+    @test cf_to_rational([]) == 0//1      # No terms, return 0
+    @test cf_to_rational([0]) == 0//1     # Zero as the only term
+
+    # Large numbers
+    @test cf_to_rational([1, 1000, 1]) == 1002//1001
+    
+    # Approximation cases
+    @test cf_to_rational([1, 1, 1, 1, 1]) == 8//5  # A longer fraction approximation
+end

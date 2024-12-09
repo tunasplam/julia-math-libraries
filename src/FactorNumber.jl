@@ -46,7 +46,7 @@ function prime_factors(n::Int)::Vector{Int}
 	end
 	return factors
 end
-# TODO i think this is wrong too
+
 function prime_factorization(n::Int)::Vector{Tuple{Int,Int}}
 	# get the twos first
 	power, factorization = 0, []

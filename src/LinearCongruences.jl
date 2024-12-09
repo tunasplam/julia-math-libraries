@@ -54,7 +54,7 @@ function array_modular_inverse(A::Vector{Int}, m::Int)::Vector{Int}
     https://cp-algorithms.com/algebra/module-inverse.html#finding-the-modular-inverse-for-array-of-numbers-modulo-m
     =#
 
-    # TODO all entries need to be relatively prime to m. disable this assertion
+    # NOTE all entries need to be relatively prime to m. disable this assertion
     # for a massive speed gain.
     for a in A
         @assert gcd(a, m) == 1
