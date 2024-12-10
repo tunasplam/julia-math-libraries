@@ -406,31 +406,50 @@ end
 @testset "Continued_Fractions.jl" begin
 
     # ChatGPT made this... pretty cool. There were three mistakes, however.
+    # I have since added a ton more test cases too
 
     # Basic cases
     @test Rational(ContinuedFraction([1])) == 1//1
     @test Rational(ContinuedFraction([2])) == 2//1
+    @test Float(ContinuedFraction([1])) == 1.0
+    @test Float(ContinuedFraction([2])) == 2.0
 
     # Simple continued fractions
     @test Rational(ContinuedFraction([1, 2])) == 3//2  # 1 + 1/2
     @test Rational(ContinuedFraction([2, 3])) == 7//3  # 2 + 1/3
+    @test Float(ContinuedFraction([1, 2])) == 3/2
+    @test Float(ContinuedFraction([2, 3])) == 7/3
+    #@test Float(ContinuedFraction([1,1,1,1,1,1,1,1,1,1,1])) == 
 
     # Longer continued fractions
     @test Rational(ContinuedFraction([1, 2, 3])) == 10//7 # 1 + 1/(2 + 1/3)
     @test Rational(ContinuedFraction([3, 2, 1])) == 10//3  # 3 + 1/(2 + 1/1)
+    @test Float(ContinuedFraction([1, 2, 3])) == 10/7
+    @test Float(ContinuedFraction([3, 2, 1])) == 10/3
 
     # Edge cases
     @test Rational(ContinuedFraction([0])) == 0//1     # Zero as the only term
+    @test Float(ContinuedFraction([0])) == 0
 
     # Large numbers
     @test Rational(ContinuedFraction([1, 1000, 1])) == 1002//1001
-    
+    @test Float(ContinuedFraction([1, 1000, 1])) == 1002/1001
+
     # Approximation cases
     @test Rational(ContinuedFraction([1, 1, 1, 1, 1])) == 8//5  # A longer fraction approximation
+    @test Float(ContinuedFraction([1, 1, 1, 1, 1])) == 8/5
 
+    # some golden ratio tests
+    @test round(Float(ContinuedFraction(ones(Int,40))),digits=6) == 1.618034
+    @test round(Float(ContinuedFraction([0], [1])),digits=6) == 1.618034
 
-    @test visualize([1,2,3]) == "1 + 1/(2 + 1/(3))"
-    @test visualize([1,2,3,4]) == "1 + 1/(2 + 1/(3 + 1/(4)))"
+    # TODO tests with orbits
+
+    @test visualize(ContinuedFraction([1,2,3])) == "1 + 1/(2 + 1/(3))"
+    @test visualize(ContinuedFraction([1,2,3,4])) == "1 + 1/(2 + 1/(3 + 1/(4)))"
+    @test visualize(ContinuedFraction([1,2,3], [1,2])) == "1 + 1/(2 + 1/(3 + 1/(1 + 1/(2 + ... ))))"
+    @test visualize(ContinuedFraction([12], [1])) == "12 + 1/(1 + ... )"
+    @test visualize(ContinuedFraction([-1, 2, -3])) == "-1 + 1/(2 + 1/(-3))"
 
     @test ContinuedFraction(1//2) == ContinuedFraction([0, 2])
     @test ContinuedFraction(3//4) == ContinuedFraction([0, 1, 3])
