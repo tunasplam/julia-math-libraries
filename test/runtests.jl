@@ -63,6 +63,12 @@ end
         [1], [1, 2], [1, 2, 4], [1, 2, 4, 8], [2],
         [2, 4], [2, 4, 8], [4], [4, 8], [8]
     ]
+
+    @test stern_brocot_tree(1) == [0, 1, 1//0]
+    @test stern_brocot_tree(2) == [0, 1//2, 1, 2, 1//0]
+    @test stern_brocot_tree(3) == [0, 1//3, 1//2, 2//3, 1, 3//2, 2, 3, 1//0]
+    @test stern_brocot_tree(1, (1//3, 2//5, 1//2)) == [1//3, 2//5, 1//2]
+    @test stern_brocot_tree(2, (1//3, 2//5, 1//2)) == [1//3, 3//8, 2//5, 3//7, 1//2]
 end
 
 # FactorNumber

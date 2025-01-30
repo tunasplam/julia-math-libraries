@@ -40,7 +40,7 @@ module JuliaMathLibraries
     export reverse_digits, digits_to_number
     include("Misc.jl")
 
-    export subsequences
+    export subsequences, stern_brocot_tree
     include("Sequence.jl")
 
     export variance, variance_2, mean
@@ -72,5 +72,8 @@ module JuliaMathLibraries
 
     export reciprocal, terminates, Rational
     include("Rational.jl")
+
+    export Float
+    include("Float.jl")
 
 end
