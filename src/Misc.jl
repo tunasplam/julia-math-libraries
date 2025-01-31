@@ -87,3 +87,5 @@ function sum_first_100_digits(n::Integer)::Integer
         prev_term = s
     end
 end
+
+tetration(a::Int, b::Int) = foldl((x, _) -> BigInt(a)^x, 1:b-1, init=BigInt(a))

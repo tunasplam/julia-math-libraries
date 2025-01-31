@@ -85,3 +85,23 @@ function terminates(q::Rational)::Bool
 	# only concerned about the primes, not the powers.
 	return all(x->x in [2,5], prime_factors(b))
 end
+
+function rational_number_to_right_of(a::Rational, n::Int)::Rational
+    #=
+    Find a rational number b s.t.:
+    b > a
+    if c \in \textbb{Q} and c \in (a, b) then den(c) > n
+
+    Do this by adding 1 to numerator of a and then repeatedly finding
+    mediant of of that number and a until the denominator is greater than n
+    =#
+    b = (a.num + 1) // a.den
+    while true
+        c = (a.num + b.num) // (a.den + b.den)
+        if c.den > n
+            return b
+        else
+            b = c
+        end
+    end
+end

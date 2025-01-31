@@ -69,6 +69,8 @@ end
     @test stern_brocot_tree(3) == [0, 1//3, 1//2, 2//3, 1, 3//2, 2, 3, 1//0]
     @test stern_brocot_tree(1, (1//3, 2//5, 1//2)) == [1//3, 2//5, 1//2]
     @test stern_brocot_tree(2, (1//3, 2//5, 1//2)) == [1//3, 3//8, 2//5, 3//7, 1//2]
+
+    
 end
 
 # FactorNumber
@@ -403,6 +405,10 @@ end
     @test digits_to_number([1,2]) == 12
     @test digits_to_number([1,2,0,3]) == 1203
     @test digits_to_number([0,1,2,3]) == 123
+
+    @test tetration(2,2) = 4
+    @test tetration(2,3) = 16
+    @test tetration(2,4) = 65536
 end
 
 #=

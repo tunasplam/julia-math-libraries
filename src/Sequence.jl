@@ -49,7 +49,9 @@ function stern_brocot_tree(
 	=#
 
     @assert n > 0
-    if n == 1 return reduce(union, seed) end
+    if n == 1
+		return collect(Set(seed))
+	end
 
 	to_process = Vector{Tuple{Rational, Rational, Rational}}()
     processed = [seed]
@@ -70,5 +72,23 @@ function stern_brocot_tree(
 			)
 		end
 	end
-	return reduce(union, processed)
+	return return collect(Set(Iterators.flatten((l, m, r) for (l, m, r) in processed)))
+end
+
+function farey_sequence(n::Int, a::Rational=0//1, b::Rational=1//1)::Vector{Rational}
+    #=
+    Use a farey sequence to generate a list of rational numbers of the form a/b
+    where HCF(a,b) = 1 and b <= n
+    =#
+    @assert n > 0
+
+    # start off with the first two terms of the sequence
+    s = [a, rational_number_to_right_of(a, n)]
+    # recurrence relation helps us figure out the rest
+    while s[end] != b
+        p, q = s[end-1], s[end]
+        d = floor((p.den + n)/q.den)
+        push!(s, (Int(round(d*q.num)) - p.num) // (Int(round(d*q.den)) - p.den))
+    end
+    return s
 end
