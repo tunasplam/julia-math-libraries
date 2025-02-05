@@ -92,3 +92,30 @@ function farey_sequence(n::Int, a::Rational=0//1, b::Rational=1//1)::Vector{Rati
     end
     return s
 end
+
+#=
+for integer a_0 ∈ [0, 2^48),
+	a_n = (25214903917 * a_{n-1} + 11) % 2^48
+=#
+struct Rand48
+	seed::Int # a_0
+	max::Int # how far to generate
+end
+
+# returns a_{n+1}
+function Base.iterate(iter::Rand48, state=(iter.seed, 0))
+	a_n, count = state
+	count > iter.max ? nothing : (a_n, ((BigInt(25214903917) * a_n + 11) % 2^48, count + 1))
+end
+
+Base.IteratorSize(::Type{Rand48}) = Base.HasLength()
+Base.length(iter::Rand48) = iter.max
+
+function modular_cycle_detection(f::Function, m::Int)
+	#=
+	This uses Brent's Cycle Detection Algorithm to detect
+	cycles in the residues of the result of a function mod m.
+		Use this when m > 10^6. Otherwise, keep a lookup table.
+	=#
+
+end
