@@ -80,6 +80,27 @@ mutable struct DSU
     function DSU()
         new(Dict{Int, Union{Int, Nothing}}(), Dict{Int, Union{Int, Nothing}}())
     end
+
+    # this is a case where you want to create the DSU by providing
+    # parent and size directly.
+    # TODO this should probably have a validator to make sure its
+    # a valid configuration.
+    function DSU(
+        parent::Dict{Int, Union{Int, Nothing}},
+        size::Dict{Int, Union{Int, Nothing}}
+    )
+        new(parent, size)
+    end
+
+    function DSU(v::Vector{Int})
+        new(
+            # convert the list into a dict where the keys are their own values.
+            # this means that all nodes have themselves as a parent.
+            Dict(x => x for x in v),
+            # upon instantiation, all values are roots of trees with size 1.
+            Dict(x => 1 for x in v)
+        )
+    end
 end
 
 function find_set(D::DSU, v::Int)::Int
