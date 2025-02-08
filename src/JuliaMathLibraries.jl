@@ -43,7 +43,7 @@ module JuliaMathLibraries
     export is_palindrome, palindromic_products_of_numbers_with_n_digits
     include("PalindromicNumbers.jl")
 
-    export reverse_digits, digits_to_number, swap
+    export reverse_digits, digits_to_number, swap, tetration
     include("Misc.jl")
 
     export subsequences, stern_brocot_tree, Rand48, farey_sequence
