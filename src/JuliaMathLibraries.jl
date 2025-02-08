@@ -2,6 +2,12 @@ module JuliaMathLibraries
 
     greet() = return "Hello"
 
+    export apply, cycle_report, first_n_terms, cycle, cycle_detection_floyds
+    include("IFS.jl")
+
+    export DSU, find_set, make_set!, union_set!
+    include("DSU.jl")
+
     export square_root_digits, sqrt_n_newtons_iteration
     include("SquareRoots.jl")
 
@@ -37,10 +43,10 @@ module JuliaMathLibraries
     export is_palindrome, palindromic_products_of_numbers_with_n_digits
     include("PalindromicNumbers.jl")
 
-    export reverse_digits, digits_to_number
+    export reverse_digits, digits_to_number, swap
     include("Misc.jl")
 
-    export subsequences, stern_brocot_tree, Rand48
+    export subsequences, stern_brocot_tree, Rand48, farey_sequence
     include("Sequence.jl")
 
     export variance, variance_2, mean

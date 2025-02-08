@@ -411,6 +411,19 @@ end
     @test tetration(2,4) = 65536
 end
 
+@testset "DSU.jl" begin
+    D = DSU()
+    make_set!(D, 10)
+    make_set!(D, 5)
+    make_set!(D, 2)
+    union_set!(D, 2, 5)
+    @assert D = DSU(
+        Dict{Int64, Union{Nothing, Int64}}(5 => 2, 2 => 2, 10 => 10),
+        Dict{Int64, Union{Nothing, Int64}}(5 => 1, 2 => 2, 10 => 1)
+    )
+    @assert find_set(D, 5) == 2
+end
+
 #=
     Continued Fractions Tests below
 =#
