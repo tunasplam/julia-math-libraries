@@ -7,8 +7,24 @@ Some of these algorithms are my original work. Some of them are from number theo
 
 Please note that not everything has been thoroughly tested. For the most part, once the library accomplished what I needed it to do I left it until it was needed at another time.
 
-From now on, only add to this library if the method is tried-and-true. experimental stuff
-should stay with their respective problem in project-euler-solutions private repo.
+Experimental stuff or stuff from before testing is in `legacy/`.
+
+# Highlights
+
+### DSU.jl
+Disjoint Set Unions. Very cool data structure thats very efficient for things like finding the minimum value of all subsequences in a sequence.
+
+### ContinuedFraction.jl
+Continued Fractions are insane. They are quite difficult to think about and work with. The functions in here makes them much more approachable. `Float.jl` also includes and extension of `Float` that allows for the conversion of a `ContinuedFraction` to `Float`. Similar for `Rational` can be found in `Rational.jl`.
+
+### Mobius.jl
+Several implementations of algorithms related to the mobius function.
+
+### Rational.jl
+Mentioned above already, but there are some other neat little functions in there.
+
+### legacy/pell_equations.jl
+Old and not looked at in quite a while. But still very fun. These were implementations of Pell Equation solvers that I used in a couple of Project Euler problems. 
 
 # Test
 julia REPL:
