@@ -191,3 +191,10 @@ function A001175(n)
 	end
 	return hehe
 end
+
+function binets_formula(n::Int)::Int
+    # Optimized version
+    return round(Int,
+        (1/sqrt(5)) * ((1 + sqrt(5))/2)^n
+    )
+end

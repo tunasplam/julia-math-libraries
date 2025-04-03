@@ -5,7 +5,7 @@ module JuliaMathLibraries
     export apply, cycle_report, first_n_terms, cycle, cycle_detection_floyds
     include("IFS.jl")
 
-    export DSU, find_set, make_set!, union_set!
+    export DSU_Size, DSU_Depth, find_set, make_set!, union_set!
     include("DSU.jl")
 
     export square_root_digits, sqrt_n_newtons_iteration
@@ -37,7 +37,7 @@ module JuliaMathLibraries
     export solve_quadratic
     include("Quadratics.jl")
 
-    export fibonnaci
+    export fibonnaci, binets_formula
     include("Fibonnaci.jl")
 
     export is_palindrome, palindromic_products_of_numbers_with_n_digits
