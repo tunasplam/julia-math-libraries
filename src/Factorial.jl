@@ -4,6 +4,8 @@ Everything regarding factorials are here.
 If you are looking for PRIMORIALS then go to Primes.jl
 =#
 
+using Serialization
+
 mutable struct Factorial{T<:Integer}
 	prev_n::T
 	n::Int
@@ -130,7 +132,7 @@ function lowest_k_such_that_n_divides_k_factorial(n::Int)::Int
 	return max_k
 end
 
-function factorial_mod(n::Int, m::Int)::Int
+function factorial_mod(n::Integer, m::Integer)::Integer
 	#=
 	Figure out what n! % m is!
 	Note that mod works nice splitting up across multiplication.
@@ -154,4 +156,18 @@ function last_k_digits_of_n_factorial(n::Int, k::Int)::Int
 		fact %= 10^k
 	end
 	return fact
+end
+
+const factorial_lookup_table = let
+    table_file = joinpath(@__DIR__, "..", "data", "factorial_lookup.bin")
+	@show table_file
+    isfile(table_file) ? deserialize(table_file) : Dict()
+end
+
+function factorial_lookup(n::Int)::Union{Int,BigInt}
+	return factorial_lookup_table[n]
+end
+
+function factorial_brute(n::Int)::BigInt
+	return prod(BigInt(k) for k in 1:n)
 end
