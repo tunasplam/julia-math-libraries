@@ -60,7 +60,7 @@ function bezout_coefficients(a::Integer, b::Integer, gcd_a_b_case::Bool=true)::T
 	end
 end
 
-function gcd(a::Int, b::Int)::Int
+function gcd(a::Integer, b::Integer)::Integer
 	#=
 	https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm
 	Uses extended euclidean algorithm to find the gcd of two numbers.
