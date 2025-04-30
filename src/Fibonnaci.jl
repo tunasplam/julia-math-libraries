@@ -192,9 +192,15 @@ function A001175(n)
 	return hehe
 end
 
-function binets_formula(n::Int)::Int
+function binets_formula(n::Integer)::Integer
     # Optimized version
-    return round(Int,
+    return round(Integer,
         (1/sqrt(5)) * ((1 + sqrt(5))/2)^n
     )
+end
+
+function fib_matrix_multiplication(n::Integer)::Integer
+	# this uses matrix multiplication. useful for reference.
+	# this runs in O(log n) time.
+	return ([1 1; 1 0]^n)[1,2]
 end

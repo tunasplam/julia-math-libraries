@@ -14,7 +14,7 @@ module JuliaMathLibraries
     export gcd
     include("GCD.jl")
 
-    export prime_factors, prime_factorization, radical, radical_list
+    export prime_factors, prime_factorization, radical, radical_list, prime_factorization2
     include("FactorNumber.jl")
 
     export primes_leq_erat, primes_leq, is_prime, primorial_list, primorial
@@ -25,7 +25,7 @@ module JuliaMathLibraries
     min_num_divisible_by_primes_leq_k, divisors, proper_divisors
     include("Divisors.jl")
 
-    export factorial, lowest_k_such_that_n_divides_k_factorial
+    export factorial, lowest_k_such_that_n_divides_k_factorial, factorial_lookup
     include("Factorial.jl")
 
     export μ_leq, μ, count_squarefree_numbers_lt
@@ -37,7 +37,7 @@ module JuliaMathLibraries
     export solve_quadratic
     include("Quadratics.jl")
 
-    export fibonnaci, binets_formula
+    export fibonnaci, binets_formula, fib_matrix_multiplication
     include("Fibonnaci.jl")
 
     export is_palindrome, palindromic_products_of_numbers_with_n_digits

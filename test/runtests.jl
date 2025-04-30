@@ -320,6 +320,11 @@ end
             @test f == 55
         end
     end
+
+    @test fib_matrix_multiplication(1) == 1
+    @test fib_matrix_multiplication(2) == 1
+    @test fib_matrix_multiplication(5) == 5
+    @test fib_matrix_multiplication(10) == 55
 end
 
 @testset "PalindromicNumbers.jl" begin
@@ -411,19 +416,20 @@ end
     @test tetration(2, 4) == 65536
 end
 
-@testset "DSU.jl" begin
-    D = DSU()
+@testset "DSU_Size.jl" begin
+    D = DSU_Size()
     make_set!(D, 10)
     make_set!(D, 5)
     make_set!(D, 2)
     union_set!(D, 2, 5)
-    # @assert D == DSU(
+    # @assert D == DSU_Size(
     #     Dict{Int64, Union{Nothing, Int64}}(5 => 2, 2 => 2, 10 => 10),
     #     Dict{Int64, Union{Nothing, Int64}}(5 => 1, 2 => 2, 10 => 1)
     # )
     @assert find_set(D, 5) == 2
 
-    D2 = DSU([1, 2, 3, 4, 5])
+    D2 = DSU_Size([1, 2, 3, 4, 5])
+    D3 = DSU_Size(1:50)
     @show D2
 end
 
