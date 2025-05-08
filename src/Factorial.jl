@@ -4,6 +4,7 @@ Everything regarding factorials are here.
 If you are looking for PRIMORIALS then go to Primes.jl
 =#
 
+using Memoize
 using Serialization
 
 mutable struct Factorial{T<:Integer}
@@ -132,7 +133,7 @@ function lowest_k_such_that_n_divides_k_factorial(n::Int)::Int
 	return max_k
 end
 
-function factorial_mod(n::Integer, m::Integer)::Integer
+@memoize function factorial_mod(n::Integer, m::Integer)::Integer
 	#=
 	Figure out what n! % m is!
 	Note that mod works nice splitting up across multiplication.
