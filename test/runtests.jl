@@ -6,6 +6,29 @@ const J = JuliaMathLibraries
     @test J.greet()== "Hello"
 end
 
+@testset "IntBaseK.jl" begin
+    @assert IntBaseK("1234", 5) == IntBaseK([1, 2, 3, 4], 5)
+    @assert IntBaseK(10, 2) == IntBaseK([1, 0, 1, 0], 2)
+    @assert IntBaseK(10, 8) == IntBaseK([1, 2], 8)
+    @assert IntBaseK(64, 8) == IntBaseK([1, 0, 0], 8)
+
+    @assert IntBaseK("1234", 5) > IntBaseK("123", 5)
+    @assert IntBaseK("-123", 5) > IntBaseK("-1234", 5)
+    @assert IntBaseK("1334", 5) > IntBaseK("1234", 5)
+    @assert IntBaseK("1234", 5) > IntBaseK("-1234", 5)
+
+    @assert IntBaseK("1233", 5) < IntBaseK("1234", 5)
+    @assert IntBaseK("-123", 5) < IntBaseK("-124", 5)
+    @assert IntBaseK("1334", 5) < IntBaseK("14344", 5)
+    @assert IntBaseK("-1234", 5) < IntBaseK("1234", 5)
+
+    @assert IntBaseK(17, 2) + IntBaseK(18, 2) == IntBaseK("100011", 2)
+    @assert IntBaseK("10101", 2) + IntBaseK("111", 2) == IntBaseK("11100", 2)
+    @assert IntBaseK("54201", 6) + IntBaseK("250", 6) == IntBaseK("54451", 6)
+    @assert IntBaseK("5555", 6) + IntBaseK("5321", 6) == IntBaseK("15320", 6)
+
+end
+
 @testset "NewtonsMethod.jl" begin
     g(x) = x^2
     g_prime(x) = 2x
@@ -185,6 +208,14 @@ end
     @test primorial_list(1000000) == [2, 6, 30, 210, 2310, 30030, 510510]
     @test primorial_list(10000000) == [2, 6, 30, 210, 2310, 30030, 510510, 9699690]
     @test primorial_list(500000000) == [2, 6, 30, 210, 2310, 30030, 510510, 9699690, 223092870]
+
+    @test miller_rabin(5) == true
+    @test miller_rabin(10) == false
+    @test miller_rabin(1) == false
+    @test miller_rabin(41) == true
+    @test miller_rabin(1_000_000_007) == true
+    @test miller_rabin(1009) == true
+    @test miller_rabin(200)  == false
 
     # TODO
     # @test primorial(1) == 2

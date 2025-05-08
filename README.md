@@ -44,6 +44,7 @@ Below is an example of using `BenchmarkTools` to compare two functions `prime_fa
 
 julia REPL:
 ```
+using BenchmarkTools
 using JuliaMathLibraries
 const J = JuliaMathLibraries
 

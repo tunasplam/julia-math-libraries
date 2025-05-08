@@ -9,4 +9,8 @@ Memoize = "c03570c3-d221-55d1-a50c-7939bbd78826"
 OffsetArrays = "6fe1bfb0-de20-5000-8ca7-80f57d26f881"
 Pipe = "b98c9c47-44ae-5843-9183-064241ee97a0"
 Printf = "de0858da-6303-5e67-8744-51eddeeeb8d7"
+Serialization = "9e88b42a-f829-5b0c-bbe9-9e923198166b"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[compat]
+Serialization = "1.11.0"

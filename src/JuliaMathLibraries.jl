@@ -14,10 +14,11 @@ module JuliaMathLibraries
     export gcd
     include("GCD.jl")
 
-    export prime_factors, prime_factorization, radical, radical_list, prime_factorization2
+    export prime_factors, prime_factorization, radical, radical_list, prime_factorization2, factorial_mod
     include("FactorNumber.jl")
 
-    export primes_leq_erat, primes_leq, is_prime, primorial_list, primorial
+    export primes_leq_erat, primes_leq, is_prime, primorial_list, primorial,
+    miller_rabin
     include("Primes.jl")
 
     export num_positive_divisors, sigma_one_list, divisor_sum,
@@ -43,7 +44,7 @@ module JuliaMathLibraries
     export is_palindrome, palindromic_products_of_numbers_with_n_digits
     include("PalindromicNumbers.jl")
 
-    export reverse_digits, digits_to_number, swap, tetration
+    export reverse_digits, digits_to_number, swap!, tetration
     include("Misc.jl")
 
     export subsequences, stern_brocot_tree, Rand48, farey_sequence
@@ -81,5 +82,8 @@ module JuliaMathLibraries
 
     export Float
     include("Float.jl")
+
+    export IntBaseK
+    include("IntBaseK.jl")
 
 end
