@@ -1,7 +1,6 @@
 # list of primes 1 to n
 #=  TODO
 	1. Get atkin sieve going
-	2. hk has an insane sieve posted in solutions to p187
 
 	Okay we might be able to use bitset sieves too loko at divyekapoor's soltuoin
 	to problem 10.
@@ -138,4 +137,112 @@ function primes_leq(n::Int64)::Vector{Int}
 		end
 	end
 	return primes
+end
+
+#=
+Below we have miller rabin functions. Each function is optimized to used simplest set of witness
+primes that guarantees deterministic results for inputted bit size.
+
+	https://cp-algorithms.com/algebra/primality_tests.html#miller-rabin-primality-test
+
+	TODO if x is Int128 but Int32 method is faster and it would fit, route to Int32 method?
+	TODO if bigint, do we do probabilistic aproach? Tackle this one last.
+=#
+
+function binpower(b::Int, e::Integer, m::Integer)::Integer
+	#=Returns b^e mod m. This uses binary exponentiation.
+	=#
+    result = 1
+	# just in case b > m
+    b %= m
+	# while there are still factors of two in the power
+    while e ≠ 0
+		# if e is odd
+        if e & 1 == 1
+			# if we are here, then we have one final b to multiply
+            result = result * b % m
+		end
+		# square the current value
+		b = b * b % m
+		# integer divide e by 2
+        e >>= 1
+	end
+    return result
+end
+
+function check_composite(x::Integer, a::Integer, d::Integer, s::Integer)::Bool
+	#= Given _, returns true if x is composite
+	=#
+	# y = a^d % x
+	y = binpower(a, d, x)
+	if y == 1 || y == x - 1
+		return false
+	end
+
+	for _ in 1:s-1
+		y = y * y % x
+		if y == x - 1
+			return false
+		end
+	end
+	return true
+end
+
+function miller_rabin(x::Int64)::Bool
+	#= Returns True if a given input is prime.
+	=#
+	@assert x > 0
+
+	if x < 2 || x % 2 == 0
+		return false
+	end
+
+	#=
+	If an input x is odd (safe to assume at this point), then x - 1 is even
+	and we can factor powers of 2 from it.
+	Thus, we can say
+		x - 1 = 2^s * d 	(d is odd)
+	Below, we determine the values of d and s.
+	=#
+	s = 0
+	d = x - 1
+	# this checks if the least significant bit of d is 1. it is a parity check.
+	while (d & 1) == 0
+		d >>= 1
+		s += 1
+	end
+
+	#=
+	Using d and s, we can use fermat's little theorem on 
+		a^(n-1) % n == 1 <-> a^(2s) - 1 % n == 0
+					== ...
+					== (a^(2^(s-1)d)+1) (a^(2^(s-2)d)+1) ... (a^d+1)(a^d-1) % n == 0
+
+		The first statement implies that n is prime. The fact that it is equivalent to the
+		final statment means that if n is prime, then n has to divide one of these factors.
+		for a base 2 ≤ a ≤ n - 2, we check if
+				a^d % n == 1
+			or
+				a^(d*2^r) % n == -1
+		for some r ∈ [0, s-1]
+
+		If we found a base a which does not satify any of the above equalities, then we have found
+		a witness for the compositeness of n, meaning that n is not prime.
+
+		TODO I have no idea what that means
+	=#
+
+	# checks each base that could be a possible witness for an integer in the provided range.
+	for a in [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37]
+		# duh
+		if x == a
+			return true
+		end
+
+		# check if a^d % x is composite
+		if check_composite(x, a, d, s)
+			return false
+		end
+	end
+	return true
 end
