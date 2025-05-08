@@ -30,7 +30,7 @@ to its immediate ancestor in the tree.
 =#
 
 #=
-    Below is the naive (inefficent) implementation of a DSU. However,
+    Below is the naive (inefficent) implementation of a DSU_Size. However,
     it is very instructive for understanding how things work.
 
     # this array keeps track of each nodes ancestor (parent).
@@ -68,31 +68,35 @@ Make sure the size can fit in RAM :)
 
 NOTE there are ALWAYS more optimizations depending on your specific use-case!
 Check the link above!
+
+Below is DSU where everything is ranked by size of each tree.
 =#
 
-mutable struct DSU
+mutable struct DSU_Size
     # supposedly julia does better with Dicts here instead of sparse arrays
     parent::Dict{Int, Union{Int, Nothing}}
     # see union_set() for details
     size::Dict{Int, Union{Int, Nothing}}
 
     # this is the actual constructor. This constructs parent and size.
-    function DSU()
+    function DSU_Size()
         new(Dict{Int, Union{Int, Nothing}}(), Dict{Int, Union{Int, Nothing}}())
     end
 
-    # this is a case where you want to create the DSU by providing
+    # this is a case where you want to create the DSU_Size by providing
     # parent and size directly.
     # TODO this should probably have a validator to make sure its
     # a valid configuration.
-    function DSU(
+    function DSU_Size(
         parent::Dict{Int, Union{Int, Nothing}},
         size::Dict{Int, Union{Int, Nothing}}
     )
         new(parent, size)
     end
 
-    function DSU(v::Vector{Int})
+    # the constructors below allow you to convert common integer collections
+    # into DSU_Sizes.
+    function DSU_Size(v::Vector{Int})
         new(
             # convert the list into a dict where the keys are their own values.
             # this means that all nodes have themselves as a parent.
@@ -101,9 +105,16 @@ mutable struct DSU
             Dict(x => 1 for x in v)
         )
     end
+
+    function DSU_Size(I::UnitRange{Int})
+        new(
+            Dict(x => x for x in I),
+            Dict(x => 1 for x in I)
+        )
+    end
 end
 
-function find_set(D::DSU, v::Int)::Int
+function find_set(D::DSU_Size, v::Int)::Int
     #= Returns the representaive (root) of the set in which
     v is a part of.
 
@@ -121,7 +132,7 @@ function find_set(D::DSU, v::Int)::Int
     return v == D.parent[v] ? v : D.parent[v] = find_set(D, D.parent[v])
 end
 
-function make_set!(D::DSU, v::Int)
+function make_set!(D::DSU_Size, v::Int)
     #=
     Creates a new set by creating a tree with root v.
     Note that v is its own ancestor!
@@ -132,7 +143,7 @@ function make_set!(D::DSU, v::Int)
     D.size[v] = 1
 end
 
-function union_set!(D::DSU, a::Int, b::Int)::Int
+function union_set!(D::DSU_Size, a::Int, b::Int)::Int
     #= This optimized version of union_set() allows us to select which
     tree gets unioned with the other (as opposed to the naive approach
     where the second always gets unioned with the first, leading to trees
@@ -154,5 +165,107 @@ function union_set!(D::DSU, a::Int, b::Int)::Int
         end
         D.parent[b] = a
         D.size[a] += D.size[a]
+    end
+end
+
+#=
+Below is DSU where all trees are ranked by depth
+=#
+
+mutable struct DSU_Depth
+    # supposedly julia does better with Dicts here instead of sparse arrays
+    parent::Dict{Int, Union{Int, Nothing}}
+    # see union_set() for details
+    depth::Dict{Int, Union{Int, Nothing}}
+
+    # this is the actual constructor. This constructs parent and size.
+    function DSU_Depth()
+        new(Dict{Int, Union{Int, Nothing}}(), Dict{Int, Union{Int, Nothing}}())
+    end
+
+    # this is a case where you want to create the DSU_Depth by providing
+    # parent and size directly.
+    # TODO this should probably have a validator to make sure its
+    # a valid configuration.
+    function DSU_Depth(
+        parent::Dict{Int, Union{Int, Nothing}},
+        depth::Dict{Int, Union{Int, Nothing}}
+    )
+        new(parent, depth)
+    end
+
+    # the constructors below allow you to convert common integer collections
+    # into DSU_Depths.
+    function DSU_Depth(v::Vector{Int})
+        new(
+            # convert the list into a dict where the keys are their own values.
+            # this means that all nodes have themselves as a parent.
+            Dict(x => x for x in v),
+            # upon instantiation, all values are roots of trees with depth 0.
+            Dict(x => 0 for x in v)
+        )
+    end
+
+    function DSU_Depth(I::UnitRange{Int})
+        new(
+            Dict(x => x for x in I),
+            Dict(x => 0 for x in I)
+        )
+    end
+end
+
+function find_set(D::DSU_Depth, v::Int)::Int
+    #= Returns the representaive (root) of the set in which
+    v is a part of.
+
+    This uses path compression. Long chains are 'compressed' by setting
+    each node in a chain's parent to be the root node rather than its
+    immediate parent. You really need to see the image on the link above
+    to fully grasp whats going on here.
+
+    NOTE that this makes future calls of find_set much more efficient because
+    calls to nodes further down the tree will be "shortcut" to their roots. It
+    is kind of like "memoizing" the root of each node which is processed.
+
+    This is O(log n) on average.
+    =#
+    return v == D.parent[v] ? v : D.parent[v] = find_set(D, D.parent[v])
+end
+
+function make_set!(D::DSU_Depth, v::Int)
+    #=
+    Creates a new set by creating a tree with root v.
+    Note that v is its own ancestor!
+    =#
+    D.parent[v] = v
+    # whatever heurstic function that you are using in union_set
+    # gets instantiated here.
+    D.depth[v] = 0
+end
+
+function union_set!(D::DSU_Depth, a::Int, b::Int)::Int
+    #= This optimized version of union_set() allows us to select which
+    tree gets unioned with the other (as opposed to the naive approach
+    where the second always gets unioned with the first, leading to trees
+    containing chains of length O(n)).
+
+    You can use many heuristics to make this more efficient. For example, you
+    can rank trees by size or by depth. All-in-all, attach the tree with the
+    lower rank to the one with the larger rank.
+
+    This implementation uses size.
+    =#
+    a, b = find_set(D, a), find_set(D, b)
+    if a != b
+        # rank is an array that stores the results of the hueristic function
+        # for each tree. The representaives are the indicies and their
+        # ranks are the values.
+        if D.depth[a] < D.depth[b]
+            a, b = b, a
+        end
+        D.parent[b] = a
+        if D.depth[a] == D.depth[b]
+            D.depth[a] += 1
+        end
     end
 end
