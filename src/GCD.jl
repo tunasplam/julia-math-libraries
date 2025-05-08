@@ -62,6 +62,9 @@ end
 
 function gcd(a::Integer, b::Integer)::Integer
 	#=
+	NOTE don't use this. just use Base.gcd
+	its fun to use this but no way is this optimized.
+
 	https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm
 	Uses extended euclidean algorithm to find the gcd of two numbers.
 	Also keeps track of the bezout coefficients x_i and t_i where,
