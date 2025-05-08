@@ -87,26 +87,13 @@ function μ_leq(n::Int)::Vector{Int}
 
 end
 
-@memoize function μ(n)
+@memoize function μ(n::Integer)::Integer
 	#=
 	https://en.wikipedia.org/wiki/M%C3%B6bius_function#:~:text=The%20M%C3%B6bius%20function%20is%20multiplicative,a%20and%20b%20are%20coprime.&text=The%20equality%20above%20leads%20to,of%20multiplicative%20and%20arithmetic%20functions.
 	see properties heading
 	=#
-
-	#=
-	total = 0
-	for k in 1:n
-		if gcd(k, n) == 1
-			# Using euler's formula and noting that we only care about
-			# the real part.
-			total += cos(2π*(k/n))
-		end
-	end
-	return(round(Int, total))
-	=#
-
 	return @pipe 1:n |>
-		filter(k -> gcd(k, n) == 1, _) |>
+		filter(k -> Base.gcd(k, n) == 1, _) |>
 		map(k -> cos(2π*(k/n)), _) |>
 		sum |>
 		round(Integer, _)
