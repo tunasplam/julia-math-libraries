@@ -44,7 +44,7 @@ module JuliaMathLibraries
     export is_palindrome, palindromic_products_of_numbers_with_n_digits
     include("PalindromicNumbers.jl")
 
-    export reverse_digits, digits_to_number, swap!, tetration
+    export reverse_digits, digits_to_number, swap!, tetration, msb, msb_power_2, lsb
     include("Misc.jl")
 
     export subsequences, stern_brocot_tree, Rand48, farey_sequence
@@ -56,7 +56,7 @@ module JuliaMathLibraries
     export partition_function_p_list, num_partitions_n_into_prime_parts_list
     include("Partitions.jl")
 
-    export iterate_combinations, C, C_mod_prime_p
+    export iterate_combinations, C, C_mod_prime_p, kummers_theorem
     include("Combinatorics.jl")
 
     export integration_trapezoid
@@ -83,7 +83,7 @@ module JuliaMathLibraries
     export Float
     include("Float.jl")
 
-    export IntBaseK
+    export IntBaseK, count_sum_carries
     include("IntBaseK.jl")
 
 end

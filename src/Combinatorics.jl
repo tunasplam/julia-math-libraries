@@ -1,3 +1,6 @@
+# NOTE this stuff if fun but if you want serious performance use julia
+# Combinatorics package.
+
 function C(n::Integer, k::Integer)::Integer
     #=
         Calculate nCr without any modular arithmetic.
@@ -151,3 +154,26 @@ function Base.iterate(C::Iterate_Combinations, index=1)
 
 end
 Base.length(C::Iterate_Combinations) = 2^C.n
+
+function kummers_theorem(n::Integer, m::Integer, p::Integer)::Integer
+    #=Determines the exponent of the highest power of a prime number p
+    that divides a given binomial coefficient.
+
+    n and m are binomial coefficient
+    p is the prime number
+
+    one nice application of this is that it very quickly determines whether
+    or not a binomial coefficient is squarefree.
+
+    squarefree if kummers_theorem(n, m, 2) < 2
+
+    https://en.wikipedia.org/wiki/Kummer%27s_theorem
+    =#
+    @assert miller_rabin(p)
+    @assert n ≥ m ≥ 0
+
+    return count_sum_carries(
+        IntBaseK(m, p),
+        IntBaseK(n - m, p)
+    )
+end

@@ -26,7 +26,6 @@ end
     @assert IntBaseK("10101", 2) + IntBaseK("111", 2) == IntBaseK("11100", 2)
     @assert IntBaseK("54201", 6) + IntBaseK("250", 6) == IntBaseK("54451", 6)
     @assert IntBaseK("5555", 6) + IntBaseK("5321", 6) == IntBaseK("15320", 6)
-
 end
 
 @testset "NewtonsMethod.jl" begin
@@ -209,6 +208,7 @@ end
     @test primorial_list(10000000) == [2, 6, 30, 210, 2310, 30030, 510510, 9699690]
     @test primorial_list(500000000) == [2, 6, 30, 210, 2310, 30030, 510510, 9699690, 223092870]
 
+    @test miller_rabin(2) == true
     @test miller_rabin(5) == true
     @test miller_rabin(10) == false
     @test miller_rabin(1) == false
@@ -434,6 +434,9 @@ end
     # C(n, k) = 0 for k < 0
     @test C_mod_prime_p(0, -3, 1733) == 0
 
+    @test kummers_theorem(10, 3, 2) == 3
+    @test kummers_theorem(3, 2, 2) == 0
+    # TODO more tests
 end
 
 @testset "Misc.jl" begin
