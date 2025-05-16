@@ -33,6 +33,10 @@ mutable struct IntBaseK
             x *= -1
         end
 
+        if x == 0
+            return new(Vector{Integer}([0]), base, false)
+        end
+
         digits = Vector{Integer}()
         for k in floor(Int,log(base,x)):-1:1
             d = base^k
@@ -111,7 +115,7 @@ function Base.:+(x::IntBaseK, y::IntBaseK)::IntBaseK
     end
 
     # make longest value be first
-    if length(y.base) > length(x.base)
+    if length(y.digits) > length(x.digits)
         t = x
         x = y
         y = t
@@ -151,6 +155,41 @@ function Base.:÷(x::IntBaseK, y::IntBaseK)::IntBaseK
 end
 
 function count_sum_carries(x::IntBaseK, y::IntBaseK)::Integer
-    # TODO this is for p203.jl
-    throw("Not Implemented")
+    #=This is used in Kummer's Theorem. Basically adding but we count
+    the carries and return that.
+    =#
+
+    # make longest value be first
+    if length(y.digits) > length(x.digits)
+        t = x
+        x = y
+        y = t
+    end
+
+    digits = zeros(Integer, length(x.digits))
+    x_digits, y_digits = reverse(x.digits), reverse(y.digits)
+    carry = 0
+    ret = 0
+    m = length(y.digits)
+    for k in 1:m
+        s = (x_digits[k] + y_digits[k]) % x.base
+        digits[k] = (s + carry) % x.base
+        carry = (x_digits[k] + y_digits[k] + carry) ÷ x.base
+        if carry > 0
+            ret += 1
+        end
+    end
+
+    # now the remaining digits of x
+    for k in m+1:length(x.digits)
+        digits[k] = (x_digits[k] + carry) % x.base
+        carry = (x_digits[k] + carry) ÷ x.base
+        if carry > 0
+            ret += 1
+        end
+    end
+    if carry > 0
+        push!(digits, carry)
+    end
+    return ret
 end
