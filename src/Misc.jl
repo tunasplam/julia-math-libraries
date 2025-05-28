@@ -1,6 +1,6 @@
 # anything that does not quite fit anywhere else goes here.
 
-function reverse_digits(n::Int)::Int
+function reverse_digits(n::Integer)::Integer
     reversed = 0
     while n > 0
         reversed = 10*reversed + n % 10
@@ -89,3 +89,31 @@ function sum_first_100_digits(n::Integer)::Integer
 end
 
 tetration(a::Int, b::Int) = foldl((x, _) -> BigInt(a)^x, 1:b-1, init=BigInt(a))
+
+# find the index of the rightmost 1 in the binary expansion of x
+# NOTE If you can guarantee that x != 0, then just use trailing_zeros
+function lsb(x::Integer)::Integer
+    x == 0 && return -1
+    return trailing_zeros(x) 
+end
+function lsb_power_2(x::Integer)::Integer
+    # evaluate the power of 2 that represent the lsb in the binary expansion of x
+    return x & -x
+end
+
+function msb(x::Integer)::Integer
+    # find the index of the leftmost 1 in the binary expansion of x
+    #x == 0 && return 0
+    return bitwidth(x) - leading_zeros(x) - 1
+end
+
+function msb_power_2(x::Integer)::Integer
+    # evaluate the power of 2 that represent the msb in the binary expansion of x
+    #x == 0 && return 0
+    return 1 << (bitwidth(x) - leading_zeros(x) - 1)
+end
+
+function bitwidth(x::Integer)::Integer
+    return sizeof(x) * 8
+end
+
