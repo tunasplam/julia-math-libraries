@@ -38,53 +38,39 @@ see p153.jl for implementation
 =#
 
 function divisors(n::Integer)::Vector{Integer}
-	divs = [1]
-
 	if n == 1
-		return divs
+		return [1]
 	end
 
-	# check perfect square
-	if isinteger(sqrt(n))
-		append!(divs, Int(sqrt(n)))
-		append!(divs, n)
-		return divs
-	end
-
-	lim = floor(Int, sqrt(n))
-	for i in 2:lim
+	divs = [1, n]
+	for i in 2:floor(Int, sqrt(n))
 		if n % i == 0
 			append!(divs, i)
 			append!(divs, n ÷ i)
 		end
 	end
-
-	append!(divs, n)
+	# if sqrt then you have one each value for sqrt(n) that you need to kill
+	if isinteger(sqrt(n))
+		deleteat!(divs, findfirst(x -> x == sqrt(n), divs))
+	end
 	return divs
 end
 
 function proper_divisors(n::Integer)::Vector{Integer}
-
 	if n == 1
 		return []
 	end
-
 	divs = [1]
-
-	# check perfect square
-	if isinteger(sqrt(n))
-		append!(divs, Int(sqrt(n)))
-		return divs
-	end
-
-	lim = floor(Int, sqrt(n))
-	for i in 2:lim
+	for i in 2:floor(Int, sqrt(n))
 		if n % i == 0
 			append!(divs, i)
 			append!(divs, n ÷ i)
 		end
 	end
-
+	# if sqrt then you have one each value for sqrt(n) that you need to kill
+	if isinteger(sqrt(n))
+		deleteat!(divs, findfirst(x -> x == sqrt(n), divs))
+	end
 	return divs
 end
 

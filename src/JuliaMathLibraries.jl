@@ -47,7 +47,7 @@ module JuliaMathLibraries
     export reverse_digits, digits_to_number, swap!, tetration, msb, msb_power_2, lsb
     include("Misc.jl")
 
-    export subsequences, stern_brocot_tree, Rand48, farey_sequence
+    export subsequences, stern_brocot_tree, Rand48, farey_sequence, alternating_sum
     include("Sequence.jl")
 
     export variance, variance_2, mean
@@ -77,7 +77,7 @@ module JuliaMathLibraries
     export ContinuedFraction, visualize
     include("ContinuedFraction.jl")
 
-    export reciprocal, terminates, Rational
+    export reciprocal, terminates, Rational, length_repeating_cycle_unit_reciprocals
     include("Rational.jl")
 
     export Float
@@ -85,5 +85,8 @@ module JuliaMathLibraries
 
     export IntBaseK, count_sum_carries
     include("IntBaseK.jl")
+
+    export totient, totient_leq
+    include("Totient.jl")
 
 end
