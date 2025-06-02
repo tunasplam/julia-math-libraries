@@ -37,41 +37,25 @@ see p153.jl for implementation
 
 =#
 
-function divisors(n::Integer)::Vector{Integer}
+function divisors(n::Integer, proper::Bool=false)::Vector{Integer}
+	# returns divisors in ascending order.
 	if n == 1
-		return [1]
+		return proper ? [] : [n]
 	end
 
-	divs = [1, n]
+	start = [1]
+	tail = proper ? [] : [n]
 	for i in 2:floor(Int, sqrt(n))
 		if n % i == 0
-			append!(divs, i)
-			append!(divs, n ÷ i)
+			push!(start, i)
+			pushfirst!(tail, n ÷ i)
 		end
 	end
 	# if sqrt then you have one each value for sqrt(n) that you need to kill
 	if isinteger(sqrt(n))
-		deleteat!(divs, findfirst(x -> x == sqrt(n), divs))
+		popfirst!(tail)
 	end
-	return divs
-end
-
-function proper_divisors(n::Integer)::Vector{Integer}
-	if n == 1
-		return []
-	end
-	divs = [1]
-	for i in 2:floor(Int, sqrt(n))
-		if n % i == 0
-			append!(divs, i)
-			append!(divs, n ÷ i)
-		end
-	end
-	# if sqrt then you have one each value for sqrt(n) that you need to kill
-	if isinteger(sqrt(n))
-		deleteat!(divs, findfirst(x -> x == sqrt(n), divs))
-	end
-	return divs
+	return append!(start, tail)
 end
 
 function num_positive_divisors(num::Integer)::Integer

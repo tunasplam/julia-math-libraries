@@ -193,6 +193,10 @@ function miller_rabin(x::Int64)::Bool
 	=#
 	@assert x > 0
 
+	if x == 2
+		return true
+	end
+
 	if x < 2 || x % 2 == 0
 		return false
 	end

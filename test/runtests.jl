@@ -114,16 +114,16 @@ end
     @test sort(prime_factorization(360), by=x -> x[1], rev=true) == [(5, 1), (3, 2), (2, 3)]
     @test sort(prime_factorization(1242), by=x -> x[1], rev=true) == [(23, 1), (3, 3), (2, 1)]
 
-    @test sort(divisors(1), rev=true) == [1]
-    @test sort(divisors(4), rev=true) == [4, 2, 1]
-    @test sort(divisors(6),  rev=true) == [6, 3, 2, 1]
-    @test sort(divisors(8), rev=true) == [8, 4, 2, 1]
-    @test sort(divisors(10), rev=true) == [10, 5, 2, 1]
-    @test sort(divisors(1),  rev=true) == [1]
-    @test sort(divisors(15), rev=true) == [15, 5, 3, 1]
-    @test sort(divisors(28), rev=true) == [28, 14, 7, 4, 2, 1]
-    @test sort(divisors(100), rev=true) == [100, 50, 25, 20, 10, 5, 4, 2, 1]
-    @test sort(divisors(1000), rev=true) == [1000, 500, 250, 200, 125, 100, 50, 40, 25, 20, 10, 8, 5, 4, 2, 1]
+    @test divisors(1) == [1]
+    @test divisors(4) == [1, 2, 4]
+    @test divisors(6) == [1, 2, 3, 6]
+    @test divisors(8) == [1, 2, 4, 8]
+    @test divisors(10) == [1, 2, 5, 10]
+    @test divisors(1) == [1]
+    @test divisors(15) == [1, 3, 5, 15]
+    @test divisors(28) == [1, 2, 4, 7, 14, 28]
+    @test divisors(100) == [1, 2, 4, 5, 10, 20, 25, 50, 100]
+    @test divisors(1000) == [1, 2, 4, 5, 8, 10, 20, 25, 40, 50, 100, 125, 200, 250, 500, 1000]
 end
 
 # Fractions
