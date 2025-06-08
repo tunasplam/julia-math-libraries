@@ -92,9 +92,7 @@ function partitions(n::Int)::Vector{Vector{Int}}
 	but it is not very clear. Brute force solution.
     They resutls are in lexicographic order
 =#	
-    # current parition being processed
-	case = []
-	cases = []
+	cases = Vector{Vector{Int}}()
 	# First case is n 1's
     case = ones(Int, n)
 
