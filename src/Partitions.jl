@@ -84,3 +84,35 @@ function num_partitions_n_into_prime_parts_list(N::Int)::Vector{Int}
     end
     return B
 end
+
+function partitions(n::Int)::Vector{Vector{Int}}
+#= 
+    https://www.quora.com/Algorithm-to-split-a-number-into-different-ordered-group-such-that-sum-of-those-numbers-make-original-number
+	originally was thinking a recursive way. And there is a recursive way on that link
+	but it is not very clear. Brute force solution.
+    They resutls are in lexicographic order
+=#	
+    # current parition being processed
+	case = []
+	cases = []
+	# First case is n 1's
+    case = ones(Int, n)
+
+	while true
+		# Keep adding on 1's sum is n
+		while sum(case) != n
+			push!(case, 1)
+		end
+
+		push!(cases, copy(case))
+
+        # remove last number from list and inrease second-to-last by 1.
+		# (merge the last two values)
+		pop!(case)
+		if length(case) == 0
+			return cases
+		end
+		case[end] += 1
+	end
+	return cases
+end
