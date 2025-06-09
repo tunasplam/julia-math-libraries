@@ -111,11 +111,18 @@ end
 Base.IteratorSize(::Type{Rand48}) = Base.HasLength()
 Base.length(iter::Rand48) = iter.max
 
-function modular_cycle_detection(f::Function, m::Int)
-	#=
-	This uses Brent's Cycle Detection Algorithm to detect
-	cycles in the residues of the result of a function mod m.
-		Use this when m > 10^6. Otherwise, keep a lookup table.
+function alternating_sum(a::Vector{Int}, start_negative::Bool=false)::Integer
+	#=return alternating sum of a given integer sequence.
+	set start_negative to true if you want to start with -1.
 	=#
+	# sum the even and the odd indexed values
+	# then add or subtract based on start_negative
+	return start_negative ? sum(a[2:2:end]) - sum(a[1:2:end]) : sum(a[1:2:end]) - sum(a[2:2:end])
+end
 
+function partial_sum(a::Vector{Integer})::Vector{Integer}
+	for i in 2:length(a)
+		a[i] = a[i-1] + a[i]
+	end
+	return a
 end

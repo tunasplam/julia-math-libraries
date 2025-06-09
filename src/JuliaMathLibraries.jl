@@ -14,7 +14,8 @@ module JuliaMathLibraries
     export gcd
     include("GCD.jl")
 
-    export prime_factors, prime_factorization, radical, radical_list, prime_factorization2, factorial_mod
+    export prime_factors, prime_factorization, radical, radical_list, prime_factorization2, factorial_mod,
+    rho
     include("FactorNumber.jl")
 
     export primes_leq_erat, primes_leq, is_prime, primorial_list, primorial,
@@ -23,7 +24,7 @@ module JuliaMathLibraries
 
     export num_positive_divisors, sigma_one_list, divisor_sum,
     σ_2, sum_sigma_one_list, num_positive_divisors_list,
-    min_num_divisible_by_primes_leq_k, divisors, proper_divisors
+    min_num_divisible_by_primes_leq_k, divisors, proper_divisors, divisors_list_leq
     include("Divisors.jl")
 
     export factorial, lowest_k_such_that_n_divides_k_factorial, factorial_lookup
@@ -44,10 +45,12 @@ module JuliaMathLibraries
     export is_palindrome, palindromic_products_of_numbers_with_n_digits
     include("PalindromicNumbers.jl")
 
-    export reverse_digits, digits_to_number, swap!, tetration, msb, msb_power_2, lsb
+    export reverse_digits, digits_to_number, swap!, tetration, msb, msb_power_2,
+    lsb, binpow, check_composite
     include("Misc.jl")
 
-    export subsequences, stern_brocot_tree, Rand48, farey_sequence, alternating_sum
+    export subsequences, stern_brocot_tree, Rand48, farey_sequence, alternating_sum,
+    partial_sum
     include("Sequence.jl")
 
     export variance, variance_2, mean
