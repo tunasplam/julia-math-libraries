@@ -114,3 +114,26 @@ function partitions(n::Int)::Vector{Vector{Int}}
 	end
 	return cases
 end
+
+function int_partition_3s_and_2s(x::Int)::Vector{Vector{Int}}
+    #= partitions x into 2's and 3's
+
+    only works if x = 2^i + 3^j
+    =#
+    P = Vector{Vector{Int}}()
+    for j in 1:x÷3
+        r = x - 3^j
+        if r < 0
+            return P
+        end
+        if r % 2 == 0
+            p = 3 * ones(Int, j)
+            append!(p, 2 * ones(Int, r ÷ 2))
+            @show p
+            # need to push all of the arrangements of p
+            for pk in multiset_permutations(p, length(p))
+                push!(P, copy(pk))
+            end
+        end
+    end
+end
